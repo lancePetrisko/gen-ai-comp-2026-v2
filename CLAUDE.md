@@ -17,6 +17,7 @@ Community Health Event Request System — a proof-of-concept web app for a Gen A
 ├── assets/
 │   └── logos/                  ← Tab icons (favicons) and navbar logos
 ├── pages/
+│   ├── login.html              ← Demo admin login (pre-filled credentials, no real auth)
 │   └── dashboard.html          ← Admin Dashboard (separate page)
 ├── css/
 │   ├── variables.css           ← Design tokens & CSS custom properties
