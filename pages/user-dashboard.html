@@ -71,10 +71,8 @@
         </div>
       </section>
 
-      <!-- Requests Table + Detail -->
-      <div class="user-requests-grid no-detail" id="user-grid">
-
-        <!-- Table -->
+      <!-- Requests List View -->
+      <div id="user-list-view">
         <div class="queue-table-wrap">
           <table class="queue-table" aria-label="Your requests">
             <thead>
@@ -93,15 +91,15 @@
             <p>You have no submitted requests.</p>
           </div>
         </div>
+      </div>
 
-        <!-- Detail Panel -->
-        <div class="user-detail-panel" id="user-detail" hidden>
-          <div class="detail-header">
-            <h3>Request Details</h3>
-            <button class="btn-close" id="user-detail-close" aria-label="Close detail panel">&times;</button>
-          </div>
-          <div class="detail-body" id="user-detail-body"></div>
-        </div>
+      <!-- Expanded Detail View (hidden by default) -->
+      <div id="user-detail-view" hidden>
+        <button class="btn btn-ghost" id="user-back-btn" style="margin-bottom:1rem;">
+          <svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><path d="M12 4l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Back to My Requests
+        </button>
+        <div id="user-detail-body" class="user-detail-full"></div>
       </div>
 
     </div>
