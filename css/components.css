@@ -127,6 +127,59 @@
   border-top: 1px solid var(--c-border);
 }
 
+/* ---------- Staff Assignment Box (detail panel) ---------- */
+.staff-assign-box {
+  background: var(--c-bg);
+  border: 1.5px solid var(--c-border);
+  border-radius: var(--radius);
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.staff-assign-box.assigned {
+  border-color: var(--c-success);
+  background: var(--c-success-light);
+}
+.staff-assign-box.no-match {
+  align-items: flex-start;
+}
+.sab-ai-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--c-primary);
+}
+.sab-match-row, .sab-assigned-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.sab-avatar {
+  width: 34px !important;
+  height: 34px !important;
+  font-size: 0.72rem !important;
+  flex-shrink: 0;
+}
+.sab-reason {
+  font-size: 0.77rem;
+  color: var(--c-text-secondary);
+  background: var(--c-surface);
+  border-radius: var(--radius);
+  padding: 0.3rem 0.55rem;
+  line-height: 1.4;
+}
+.sab-actions {
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
 /* ---------- Chart Hover Tooltip ---------- */
 .chart-hover-tooltip {
   position: fixed;

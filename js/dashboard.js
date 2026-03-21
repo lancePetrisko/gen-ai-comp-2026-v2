@@ -356,6 +356,9 @@ function renderDetailPanel(req) {
           <label for="admin-notes">Admin Notes</label>
           <textarea id="admin-notes" rows="2" placeholder="Internal notes…">${escHtml(req.adminNotes)}</textarea>
         </div>
+
+        ${buildStaffAssignmentHTML(req)}
+
         <div class="admin-actions">
           <button class="btn btn-primary btn-sm" id="btn-save-admin">Save Changes</button>
           ${req.status === 'Approved' ? `<button class="btn btn-success btn-sm" id="btn-create-invite">Create Event Invite</button>` : ''}
@@ -400,6 +403,134 @@ function renderDetailPanel(req) {
     refreshDashboard();
     renderDetailPanel(req);
   });
+
+  // Staff assignment buttons
+  const btnConfirmAssign = document.getElementById('btn-confirm-assign');
+  if (btnConfirmAssign) {
+    btnConfirmAssign.addEventListener('click', () => {
+      assignStaffFromDetail(btnConfirmAssign.dataset.staffId, req);
+    });
+  }
+  const btnClearAssign = document.getElementById('btn-clear-assign');
+  if (btnClearAssign) {
+    btnClearAssign.addEventListener('click', () => {
+      unassignStaffFromDetail(req);
+    });
+  }
+  const btnAllMatches = document.getElementById('btn-all-matches');
+  if (btnAllMatches) {
+    btnAllMatches.addEventListener('click', () => openSmartMatch(req));
+  }
+}
+
+// ==================== STAFF ASSIGNMENT (detail panel) ====================
+function buildStaffAssignmentHTML(req) {
+  // Already assigned — show current assignment
+  if (req.assignedStaffId) {
+    const staff = STAFF.find(s => s.id === req.assignedStaffId);
+    const name  = staff ? staff.name   : req.assignedStaffName || 'Unknown';
+    const sc    = staff ? statusConfig(staff.status) : { cls: 'pill-available', dotCls: 'dot-available' };
+    const title = staff ? staff.title  : '';
+    return `
+      <div class="admin-field">
+        <label>Staff Assignment</label>
+        <div class="staff-assign-box assigned">
+          <div class="sab-assigned-row">
+            <div class="staff-avatar sab-avatar" style="background:${staff ? avatarColor(staff.id) : '#64748b'};">
+              ${staff ? staff.avatar : name.slice(0,2).toUpperCase()}
+            </div>
+            <div style="flex:1;min-width:0;">
+              <div style="font-weight:700;font-size:0.88rem;">${escHtml(name)}</div>
+              ${title ? `<div style="font-size:0.75rem;color:var(--c-text-secondary);">${escHtml(title)}</div>` : ''}
+            </div>
+            <div class="staff-status-pill ${sc.cls}">
+              <span class="status-dot ${sc.dotCls}"></span>
+              ${staff ? escHtml(staff.status) : 'Assigned'}
+            </div>
+          </div>
+          <div class="sab-actions">
+            <span style="font-size:0.75rem;color:var(--c-success);font-weight:600;">✓ Assigned</span>
+            <button class="btn btn-ghost btn-sm" id="btn-clear-assign">Change</button>
+            <button class="btn btn-ghost btn-sm" id="btn-all-matches">View All Matches</button>
+          </div>
+        </div>
+      </div>`;
+  }
+
+  // Not assigned — show AI top suggestion
+  const matches = computeMatches(req);
+  if (!matches || matches.length === 0) {
+    return `
+      <div class="admin-field">
+        <label>Staff Assignment</label>
+        <div class="staff-assign-box no-match">
+          <span style="font-size:0.82rem;color:var(--c-text-secondary);">No available staff found for this event.</span>
+          <button class="btn btn-ghost btn-sm" id="btn-all-matches" style="margin-top:0.4rem;">View All Staff</button>
+        </div>
+      </div>`;
+  }
+
+  const { staff, reasons } = matches[0];
+  const sc = statusConfig(staff.status);
+  return `
+    <div class="admin-field">
+      <label>Staff Assignment</label>
+      <div class="staff-assign-box">
+        <div class="sab-ai-label">
+          <svg viewBox="0 0 20 20" width="13" height="13"><path d="M10 2a1 1 0 0 1 1 1v1.07A7 7 0 0 1 16.93 10H18a1 1 0 1 1 0 2h-1.07A7 7 0 0 1 11 17.93V19a1 1 0 1 1-2 0v-1.07A7 7 0 0 1 3.07 12H2a1 1 0 1 1 0-2h1.07A7 7 0 0 1 9 4.07V3a1 1 0 0 1 1-1zm0 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8z" fill="currentColor"/></svg>
+          AI Suggested Staff
+        </div>
+        <div class="sab-match-row">
+          <div class="staff-avatar sab-avatar" style="background:${avatarColor(staff.id)};">${staff.avatar}</div>
+          <div style="flex:1;min-width:0;">
+            <div style="font-weight:700;font-size:0.88rem;">${escHtml(staff.name)}</div>
+            <div style="font-size:0.75rem;color:var(--c-text-secondary);">${escHtml(staff.title)}</div>
+          </div>
+          <div class="staff-status-pill ${sc.cls}">
+            <span class="status-dot ${sc.dotCls}"></span>${escHtml(staff.status)}
+          </div>
+        </div>
+        <div class="sab-reason">✦ ${escHtml(reasons.join(' · '))}</div>
+        <div class="sab-actions">
+          <button class="btn btn-success btn-sm" id="btn-confirm-assign" data-staff-id="${staff.id}">
+            ✓ Assign ${escHtml(staff.name)}
+          </button>
+          <button class="btn btn-ghost btn-sm" id="btn-all-matches">View All Matches</button>
+        </div>
+      </div>
+    </div>`;
+}
+
+function assignStaffFromDetail(staffId, req) {
+  const staff = STAFF.find(s => s.id === staffId);
+  if (!staff) return;
+  staff.status            = 'Actively Working';
+  staff.currentAssignment = req.eventName;
+  staff.nextAvailable     = formatDate(req.eventDate);
+  req.assignedStaffId     = staff.id;
+  req.assignedStaffName   = staff.name;
+  if (req.status === 'Submitted' || req.status === 'In Review') {
+    req.status = 'Approved';
+  }
+  Store.save();
+  showToast(`${staff.name} assigned to "${req.eventName}"`);
+  refreshDashboard();
+  renderDetailPanel(req);
+}
+
+function unassignStaffFromDetail(req) {
+  const staff = STAFF.find(s => s.id === req.assignedStaffId);
+  if (staff && staff.status === 'Actively Working') {
+    staff.status            = 'Available';
+    staff.currentAssignment = null;
+    staff.nextAvailable     = 'Now';
+  }
+  req.assignedStaffId   = null;
+  req.assignedStaffName = null;
+  Store.save();
+  showToast('Staff assignment removed');
+  refreshDashboard();
+  renderDetailPanel(req);
 }
 
 // ==================== PLANNING ====================
