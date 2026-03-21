@@ -33,6 +33,7 @@ function refreshDashboard() {
   renderPlanning();
   renderReporting();
   renderAssets();
+  renderProviders();
 }
 
 // ==================== SUMMARY COUNTS ====================
@@ -498,6 +499,76 @@ function renderAssets() {
       </ul>
     </div>
   `).join('');
+}
+
+// ==================== PROVIDERS ====================
+function renderProviders() {
+  const alertsGrid = document.getElementById('providers-alerts-grid');
+  const bulkGrid   = document.getElementById('providers-bulk-grid');
+
+  const alertCards = [];
+  PROVIDERS.forEach(provCat => {
+    const assetCat = ASSETS.find(a => a.category === provCat.category);
+    if (!assetCat) return;
+    const lowItems = assetCat.items.filter(item => item.qty <= provCat.lowStockThreshold);
+    if (lowItems.length > 0) alertCards.push(providerCategoryCard(provCat, lowItems));
+  });
+
+  alertsGrid.innerHTML = alertCards.length
+    ? alertCards.join('')
+    : '<p class="providers-empty">All stock levels are healthy — no resupply alerts at this time.</p>';
+
+  bulkGrid.innerHTML = PROVIDERS.map(provCat => providerCategoryCard(provCat, null)).join('');
+
+  [alertsGrid, bulkGrid].forEach(grid => {
+    grid.querySelectorAll('.provider-cat-card').forEach(card => {
+      card.querySelector('.provider-cat-header').addEventListener('click', () => {
+        card.classList.toggle('expanded');
+      });
+    });
+  });
+}
+
+function providerCategoryCard(provCat, lowItems) {
+  const lowItemsHtml = lowItems ? `
+    <div class="provider-low-items">
+      ${lowItems.map(item => `
+        <div class="provider-low-item">
+          <span class="provider-low-name">${escHtml(item.name)}</span>
+          <span class="provider-low-qty">${item.qty} left</span>
+        </div>`).join('')}
+    </div>` : '';
+
+  const badge = lowItems
+    ? `<span class="provider-cat-badge badge-alert">${lowItems.length} item${lowItems.length > 1 ? 's' : ''} low</span>`
+    : `<span class="provider-cat-badge badge-count">${provCat.providers.length} supplier${provCat.providers.length !== 1 ? 's' : ''}</span>`;
+
+  return `
+    <div class="provider-cat-card">
+      <div class="provider-cat-header">
+        <span class="provider-cat-icon" style="background:${provCat.color};">${provCat.icon}</span>
+        <div class="provider-cat-info">
+          <strong>${escHtml(provCat.category)}</strong>
+          ${badge}
+        </div>
+        <span class="provider-expand-chevron">›</span>
+      </div>
+      ${lowItemsHtml}
+      <div class="provider-list">
+        ${provCat.providers.map(p => `
+          <div class="provider-item">
+            <div class="provider-item-top">
+              <strong class="provider-name">${escHtml(p.name)}</strong>
+              <span class="provider-phone">${escHtml(p.phone)}</span>
+            </div>
+            <p class="provider-specialty">${escHtml(p.specialty)}</p>
+            <div class="provider-meta">
+              <span class="provider-meta-tag">⏱ ${escHtml(p.turnaround)}</span>
+              <span class="provider-meta-tag">📦 Min: ${escHtml(p.minOrder)}</span>
+            </div>
+          </div>`).join('')}
+      </div>
+    </div>`;
 }
 
 // ==================== TIMELINE TOOLTIP ====================

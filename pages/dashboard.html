@@ -84,6 +84,7 @@
         <button class="dash-tab" role="tab" aria-selected="false" data-tab="planning">Planning</button>
         <button class="dash-tab" role="tab" aria-selected="false" data-tab="reporting">Reporting</button>
         <button class="dash-tab" role="tab" aria-selected="false" data-tab="assets">Assets</button>
+        <button class="dash-tab" role="tab" aria-selected="false" data-tab="providers">Providers</button>
       </div>
 
       <!-- TAB: Request Queue -->
@@ -202,6 +203,37 @@
         <div class="assets-layout" id="assets-grid"></div>
       </div>
 
+      <!-- TAB: Providers -->
+      <div class="tab-panel" id="tab-providers" role="tabpanel" hidden>
+        <div class="providers-layout">
+
+          <!-- Resupply Alerts -->
+          <section class="providers-section">
+            <div class="providers-section-header">
+              <div class="providers-section-icon-wrap alert-icon-wrap">⚠️</div>
+              <div>
+                <h3>Resupply Alerts</h3>
+                <p class="providers-section-desc">Items predicted to be out of stock or needing resupply soon. Click a category to view suppliers.</p>
+              </div>
+            </div>
+            <div class="providers-grid" id="providers-alerts-grid"></div>
+          </section>
+
+          <!-- Mass Buying -->
+          <section class="providers-section">
+            <div class="providers-section-header">
+              <div class="providers-section-icon-wrap bulk-icon-wrap">📦</div>
+              <div>
+                <h3>Mass Buying</h3>
+                <p class="providers-section-desc">Browse all asset categories and contact bulk suppliers. Click a category to view vendors.</p>
+              </div>
+            </div>
+            <div class="providers-grid" id="providers-bulk-grid"></div>
+          </section>
+
+        </div>
+      </div>
+
     </div>
   </main>
 
@@ -234,6 +266,7 @@
   <script src="../js/ai.js"></script>
   <script src="../js/data/demo-requests.js"></script>
   <script src="../js/data/assets.js"></script>
+  <script src="../js/data/providers.js"></script>
   <script src="../js/charts.js"></script>
   <script src="../js/dashboard.js"></script>
 </body>
