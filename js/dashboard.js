@@ -417,6 +417,13 @@ function renderPlanning() {
         </div>
       </div>
     `).join('');
+
+    timeline.querySelectorAll('.timeline-item').forEach((item, i) => {
+      const req = upcoming[i];
+      item.addEventListener('mousemove', e => showTimelineTooltip(req, e));
+      item.addEventListener('mouseleave', hideTimelineTooltip);
+      item.addEventListener('click', () => { hideTimelineTooltip(); openTimelineDetail(req); });
+    });
   }
 
   const staffing = document.getElementById('planning-staffing');
@@ -458,10 +465,25 @@ function renderPlanning() {
 
 // ==================== REPORTING ====================
 function renderReporting() {
-  drawDonut('chart-status', 'legend-status', countBy(Store.requests, r => r.status));
-  drawDonut('chart-category', 'legend-category', countBy(Store.requests, r => r.adminCategory || r.aiCategory));
-  drawDonut('chart-fulfillment', 'legend-fulfillment', countBy(Store.requests, r => r.adminFulfillment || r.aiFulfillment));
-  drawDonut('chart-area', 'legend-area', countBy(Store.requests, r => r.serviceArea));
+  const groupByKey = (fn) => {
+    const map = {};
+    Store.requests.forEach(r => {
+      const key = fn(r);
+      if (!map[key]) map[key] = [];
+      map[key].push(r);
+    });
+    return map;
+  };
+
+  const statusMap      = groupByKey(r => r.status);
+  const categoryMap    = groupByKey(r => r.adminCategory || r.aiCategory);
+  const fulfillmentMap = groupByKey(r => r.adminFulfillment || r.aiFulfillment);
+  const areaMap        = groupByKey(r => r.serviceArea);
+
+  drawDonut('chart-status',      'legend-status',      countBy(Store.requests, r => r.status),                           statusMap);
+  drawDonut('chart-category',    'legend-category',    countBy(Store.requests, r => r.adminCategory || r.aiCategory),    categoryMap);
+  drawDonut('chart-fulfillment', 'legend-fulfillment', countBy(Store.requests, r => r.adminFulfillment || r.aiFulfillment), fulfillmentMap);
+  drawDonut('chart-area',        'legend-area',        countBy(Store.requests, r => r.serviceArea),                      areaMap);
   drawBarChart();
 }
 
@@ -476,6 +498,136 @@ function renderAssets() {
       </ul>
     </div>
   `).join('');
+}
+
+// ==================== TIMELINE TOOLTIP ====================
+function showTimelineTooltip(req, e) {
+  let el = document.getElementById('chart-hover-tooltip');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'chart-hover-tooltip';
+    el.className = 'chart-hover-tooltip';
+    document.body.appendChild(el);
+  }
+
+  const pri = req.adminPriority || req.aiPriority;
+  const ful = req.adminFulfillment || req.aiFulfillment;
+
+  el.innerHTML = `
+    <div class="cht-header">
+      <span class="cht-label">${escHtml(req.eventName)}</span>
+    </div>
+    <div class="cht-count">${escHtml(req.organization)} · ${escHtml(req.city)}</div>
+    <div class="cht-cases">
+      <div class="cht-case">${formatDate(req.eventDate)} · ${formatTime(req.startTime)}–${formatTime(req.endTime)}</div>
+      <div class="cht-case">${statusBadge(req.status)} ${priorityBadge(pri)}</div>
+      <div class="cht-case">${escHtml(req.requestType)} · ${escHtml(ful)}</div>
+      <div class="cht-case">${escHtml(req.audienceType)} · Est. ${escHtml(req.estimatedAttendance)}</div>
+      ${req.additionalNotes ? `<div class="cht-case" style="color:var(--c-text-secondary);font-style:italic;margin-top:0.2rem;">${escHtml(req.additionalNotes)}</div>` : ''}
+    </div>
+  `;
+
+  el.classList.add('visible');
+
+  const PAD = 14, vw = window.innerWidth, vh = window.innerHeight;
+  const tw = el.offsetWidth || 240, th = el.offsetHeight || 140;
+  let left = e.clientX + PAD;
+  let top  = e.clientY + PAD;
+  if (left + tw > vw - 8) left = e.clientX - tw - PAD;
+  if (top  + th > vh - 8) top  = e.clientY - th - PAD;
+  el.style.left = left + 'px';
+  el.style.top  = top  + 'px';
+}
+
+function hideTimelineTooltip() {
+  const el = document.getElementById('chart-hover-tooltip');
+  if (el) el.classList.remove('visible');
+}
+
+function openTimelineDetail(req) {
+  let overlay = document.getElementById('chart-drilldown-overlay');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.id = 'chart-drilldown-overlay';
+    overlay.className = 'chart-drilldown-overlay';
+    overlay.innerHTML = `
+      <div class="chart-drilldown" role="dialog" aria-modal="true">
+        <div class="chart-drilldown-header">
+          <h3 id="chart-drilldown-title"></h3>
+          <button class="btn-close" id="chart-drilldown-close" aria-label="Close">&times;</button>
+        </div>
+        <div class="chart-drilldown-body" id="chart-drilldown-body"></div>
+      </div>
+    `;
+    document.body.appendChild(overlay);
+    document.getElementById('chart-drilldown-close').addEventListener('click', closeChartDrilldown);
+    overlay.addEventListener('click', e => { if (e.target === overlay) closeChartDrilldown(); });
+  }
+
+  const cat = req.adminCategory || req.aiCategory;
+  const pri = req.adminPriority || req.aiPriority;
+  const ful = req.adminFulfillment || req.aiFulfillment;
+
+  document.getElementById('chart-drilldown-title').innerHTML =
+    `${escHtml(req.eventName)} <span style="font-weight:400;font-size:0.85rem;color:var(--c-text-secondary);">${req.id}</span>`;
+
+  document.getElementById('chart-drilldown-body').innerHTML = `
+    <div class="td-badges" style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:1rem;">
+      ${statusBadge(req.status)} ${priorityBadge(pri)} ${areaBadge(req.serviceArea)}
+    </div>
+
+    <div class="td-grid">
+      <div class="td-section">
+        <div class="td-section-title">Event</div>
+        <div class="td-row"><span class="td-label">Date</span><span>${formatDate(req.eventDate)}</span></div>
+        <div class="td-row"><span class="td-label">Time</span><span>${formatTime(req.startTime)} – ${formatTime(req.endTime)}</span></div>
+        <div class="td-row"><span class="td-label">Location</span><span>${escHtml(req.eventLocation)}</span></div>
+        <div class="td-row"><span class="td-label">City / ZIP</span><span>${escHtml(req.city)}, ${escHtml(req.zipCode)}</span></div>
+        <div class="td-row"><span class="td-label">Audience</span><span>${escHtml(req.audienceType)}</span></div>
+        <div class="td-row"><span class="td-label">Attendance</span><span>${escHtml(req.estimatedAttendance)}</span></div>
+      </div>
+
+      <div class="td-section">
+        <div class="td-section-title">Requestor</div>
+        <div class="td-row"><span class="td-label">Name</span><span>${escHtml(req.requestorName)}</span></div>
+        <div class="td-row"><span class="td-label">Organization</span><span>${escHtml(req.organization)}</span></div>
+        <div class="td-row"><span class="td-label">Email</span><span>${escHtml(req.email)}</span></div>
+        <div class="td-row"><span class="td-label">Phone</span><span>${escHtml(req.phone || '—')}</span></div>
+      </div>
+
+      <div class="td-section">
+        <div class="td-section-title">Request</div>
+        <div class="td-row"><span class="td-label">Type</span><span>${escHtml(req.requestType)}</span></div>
+        <div class="td-row"><span class="td-label">Fulfillment</span><span>${escHtml(ful)}</span></div>
+        <div class="td-row"><span class="td-label">Category</span><span>${escHtml(cat)}</span></div>
+        <div class="td-row"><span class="td-label">Materials</span><span>${req.materials && req.materials.length ? req.materials.join(', ') : '—'}</span></div>
+        <div class="td-row"><span class="td-label">Staff Support</span><span>${escHtml(req.staffSupport || 'Not specified')}</span></div>
+      </div>
+
+      <div class="td-section">
+        <div class="td-section-title">AI Insights</div>
+        <div class="td-row"><span class="td-label">Category</span><span>${escHtml(req.aiCategory)}</span></div>
+        <div class="td-row"><span class="td-label">Priority</span><span>${priorityBadge(req.aiPriority)}</span></div>
+        <div class="td-row"><span class="td-label">Route</span><span>${escHtml(req.aiFulfillment)}</span></div>
+        <div class="td-row"><span class="td-label">Staffing</span><span>${escHtml(req.aiStaffing)}</span></div>
+        ${req.aiTags.length ? `<div class="td-row"><span class="td-label">Tags</span><span>${req.aiTags.map(t => `<span class="badge badge-submitted" style="margin-right:0.25rem;">${escHtml(t)}</span>`).join('')}</span></div>` : ''}
+      </div>
+    </div>
+
+    ${req.eventDescription ? `
+    <div class="td-section" style="margin-top:0.75rem;">
+      <div class="td-section-title">Description</div>
+      <p style="font-size:0.85rem;line-height:1.5;color:var(--c-text-secondary);margin:0;">${escHtml(req.eventDescription)}</p>
+    </div>` : ''}
+
+    ${req.additionalNotes ? `
+    <div class="td-section" style="margin-top:0.75rem;">
+      <div class="td-section-title">Notes</div>
+      <p style="font-size:0.85rem;line-height:1.5;color:var(--c-text-secondary);margin:0;">${escHtml(req.additionalNotes)}</p>
+    </div>` : ''}
+  `;
+
+  overlay.classList.add('visible');
 }
 
 // ==================== EVENT INVITE MODAL ====================
