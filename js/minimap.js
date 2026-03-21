@@ -1,6 +1,6 @@
 /* =============================================
-   Minimap — canvas-based event location map
-   Illinois-region, no external dependencies
+   Minimap — canvas Salt Lake City map
+   Professional street-map style, no dependencies
    ============================================= */
 
 // Polyfill roundRect for older browsers
@@ -24,65 +24,188 @@
   }
 })();
 
-/* ---- City coordinate lookup ---- */
-const CITY_COORDS = {
-  'Springfield':    { lat: 39.78, lng: -89.65 },
-  'Carlinville':    { lat: 39.28, lng: -89.88 },
-  'Decatur':        { lat: 39.84, lng: -88.95 },
-  'Champaign':      { lat: 40.12, lng: -88.24 },
-  'St. Louis':      { lat: 38.63, lng: -90.19 },
-  'Bloomington':    { lat: 40.48, lng: -88.99 },
-  'Chicago':        { lat: 41.88, lng: -87.63 },
-  'Carbondale':     { lat: 37.73, lng: -89.22 },
-  'East St. Louis': { lat: 38.62, lng: -90.15 },
-  'Normal':         { lat: 40.51, lng: -88.99 },
-  'Peoria':         { lat: 40.69, lng: -89.59 },
-  'Rockford':       { lat: 42.27, lng: -89.09 },
-  'Joliet':         { lat: 41.52, lng: -88.08 },
-  'Naperville':     { lat: 41.79, lng: -88.15 },
-  'Aurora':         { lat: 41.76, lng: -88.32 }
-};
+/* =============================================
+   MAP VIEWPORT  (SLC valley)
+   ============================================= */
+const MAP_BOUNDS = { minLat: 40.56, maxLat: 40.89, minLng: -112.09, maxLng: -111.70 };
 
-/* ---- Map viewport bounds ---- */
-const MAP_BOUNDS = { minLat: 36.6, maxLat: 42.8, minLng: -91.5, maxLng: -87.0 };
-
-/* ---- Simplified Illinois border (lat/lng points) ---- */
-const IL_OUTLINE = [
-  { lat: 42.49, lng: -87.80 }, // NE — Lake Michigan corner
-  { lat: 42.49, lng: -88.70 },
-  { lat: 42.49, lng: -89.40 },
-  { lat: 42.50, lng: -90.64 }, // NW
-  { lat: 42.21, lng: -90.64 },
-  { lat: 41.77, lng: -90.18 },
-  { lat: 41.44, lng: -90.45 },
-  { lat: 40.64, lng: -91.40 }, // Mississippi River, west
-  { lat: 39.94, lng: -91.41 },
-  { lat: 39.32, lng: -91.37 },
-  { lat: 38.96, lng: -90.94 },
-  { lat: 38.63, lng: -90.24 }, // St. Louis confluence
-  { lat: 37.96, lng: -89.52 },
-  { lat: 37.00, lng: -89.17 }, // Cairo — southern tip
-  { lat: 36.99, lng: -88.07 },
-  { lat: 37.09, lng: -87.91 }, // Kentucky border
-  { lat: 37.40, lng: -87.91 },
-  { lat: 38.00, lng: -87.62 }, // Indiana border
-  { lat: 38.96, lng: -87.52 },
-  { lat: 39.61, lng: -87.53 },
-  { lat: 40.49, lng: -87.53 },
-  { lat: 41.77, lng: -87.52 },
-  { lat: 42.49, lng: -87.80 }  // back to NE
+/* =============================================
+   ARBITRARY DEMO PIN POSITIONS  (SLC valley)
+   — not tied to real addresses, spread for clarity
+   ============================================= */
+const DEMO_PIN_POSITIONS = [
+  { lat: 40.762, lng: -111.893 }, //  0 — downtown core
+  { lat: 40.726, lng: -111.920 }, //  1 — west side
+  { lat: 40.776, lng: -111.858 }, //  2 — university / east bench
+  { lat: 40.695, lng: -111.888 }, //  3 — south city
+  { lat: 40.748, lng: -111.946 }, //  4 — west valley
+  { lat: 40.802, lng: -111.889 }, //  5 — north SLC
+  { lat: 40.754, lng: -111.836 }, //  6 — foothill bench
+  { lat: 40.718, lng: -111.857 }, //  7 — millcreek area
+  { lat: 40.669, lng: -111.900 }, //  8 — murray area
+  { lat: 40.783, lng: -111.930 }, //  9 — NW / airport edge
+  { lat: 40.627, lng: -111.872 }, // 10 — midvale / sandy
+  { lat: 40.742, lng: -111.874 }, // 11 — central east
+  { lat: 40.770, lng: -111.908 }, // 12 — near capitol
+  { lat: 40.650, lng: -111.932 }, // 13 — taylorsville area
+  { lat: 40.813, lng: -111.854 }, // 14 — sugarhouse heights
 ];
 
-/* ---- Missouri stub (to show St. Louis isn't floating) ---- */
-const MO_STUB = [
-  { lat: 38.96, lng: -90.94 },
-  { lat: 38.63, lng: -90.24 },
-  { lat: 38.25, lng: -90.47 },
-  { lat: 38.09, lng: -90.72 },
-  { lat: 38.96, lng: -90.94 }
+/* =============================================
+   GEOGRAPHIC FEATURES
+   ============================================= */
+
+// Great Salt Lake (simplified shoreline, NW)
+const GREAT_SALT_LAKE = [
+  { lat: 40.89, lng: -112.09 },
+  { lat: 40.89, lng: -111.97 },
+  { lat: 40.86, lng: -111.95 },
+  { lat: 40.83, lng: -111.97 },
+  { lat: 40.80, lng: -112.00 },
+  { lat: 40.77, lng: -112.05 },
+  { lat: 40.74, lng: -112.09 },
+  { lat: 40.89, lng: -112.09 },
 ];
 
-/* ---- Coordinate projection helpers ---- */
+// Wasatch Mountains — far east, dark green
+const WASATCH = [
+  { lat: 40.89, lng: -111.78 },
+  { lat: 40.89, lng: -111.70 },
+  { lat: 40.56, lng: -111.70 },
+  { lat: 40.56, lng: -111.79 },
+  { lat: 40.62, lng: -111.80 },
+  { lat: 40.70, lng: -111.81 },
+  { lat: 40.75, lng: -111.81 },
+  { lat: 40.80, lng: -111.80 },
+  { lat: 40.85, lng: -111.79 },
+  { lat: 40.89, lng: -111.78 },
+];
+
+// Foothills / benches — lighter green strip between mountains and city
+const FOOTHILLS = [
+  { lat: 40.89, lng: -111.82 },
+  { lat: 40.89, lng: -111.78 },
+  { lat: 40.85, lng: -111.79 },
+  { lat: 40.80, lng: -111.80 },
+  { lat: 40.75, lng: -111.81 },
+  { lat: 40.70, lng: -111.81 },
+  { lat: 40.62, lng: -111.80 },
+  { lat: 40.56, lng: -111.79 },
+  { lat: 40.56, lng: -111.82 },
+  { lat: 40.62, lng: -111.83 },
+  { lat: 40.70, lng: -111.84 },
+  { lat: 40.75, lng: -111.84 },
+  { lat: 40.80, lng: -111.83 },
+  { lat: 40.85, lng: -111.82 },
+  { lat: 40.89, lng: -111.82 },
+];
+
+// Airport — light gray rectangle NW of downtown
+const AIRPORT = [
+  { lat: 40.800, lng: -111.995 },
+  { lat: 40.800, lng: -111.963 },
+  { lat: 40.785, lng: -111.961 },
+  { lat: 40.783, lng: -111.995 },
+  { lat: 40.800, lng: -111.995 },
+];
+
+// Parks — small green patches
+const PARKS = [
+  // Liberty Park
+  [
+    { lat: 40.728, lng: -111.875 },
+    { lat: 40.728, lng: -111.862 },
+    { lat: 40.721, lng: -111.862 },
+    { lat: 40.721, lng: -111.875 },
+  ],
+  // Sugar House Park
+  [
+    { lat: 40.717, lng: -111.845 },
+    { lat: 40.717, lng: -111.836 },
+    { lat: 40.712, lng: -111.836 },
+    { lat: 40.712, lng: -111.845 },
+  ],
+  // Jordan Park / west side park
+  [
+    { lat: 40.748, lng: -111.921 },
+    { lat: 40.748, lng: -111.914 },
+    { lat: 40.743, lng: -111.914 },
+    { lat: 40.743, lng: -111.921 },
+  ],
+  // Memory Grove / city creek
+  [
+    { lat: 40.779, lng: -111.887 },
+    { lat: 40.779, lng: -111.882 },
+    { lat: 40.774, lng: -111.882 },
+    { lat: 40.774, lng: -111.887 },
+  ],
+  // Rose Park area
+  [
+    { lat: 40.800, lng: -111.924 },
+    { lat: 40.800, lng: -111.917 },
+    { lat: 40.796, lng: -111.917 },
+    { lat: 40.796, lng: -111.924 },
+  ],
+];
+
+/* =============================================
+   ROAD DATA
+   ============================================= */
+
+// Jordan River — meanders N-S through west valley
+const JORDAN_RIVER = [
+  { lat: 40.89, lng: -111.940 },
+  { lat: 40.84, lng: -111.944 },
+  { lat: 40.80, lng: -111.948 },
+  { lat: 40.76, lng: -111.951 },
+  { lat: 40.72, lng: -111.955 },
+  { lat: 40.68, lng: -111.960 },
+  { lat: 40.64, lng: -111.962 },
+  { lat: 40.60, lng: -111.965 },
+  { lat: 40.56, lng: -111.967 },
+];
+
+// I-15 — N-S, just west of downtown
+const I15 = [
+  { lat: 40.89, lng: -111.900 },
+  { lat: 40.83, lng: -111.899 },
+  { lat: 40.77, lng: -111.898 },
+  { lat: 40.72, lng: -111.897 },
+  { lat: 40.65, lng: -111.895 },
+  { lat: 40.60, lng: -111.893 },
+  { lat: 40.56, lng: -111.891 },
+];
+
+// I-80 — E-W through city (curves near Wasatch)
+const I80 = [
+  { lat: 40.772, lng: -112.09 },
+  { lat: 40.769, lng: -111.98 },
+  { lat: 40.764, lng: -111.94 },
+  { lat: 40.761, lng: -111.90 },
+  { lat: 40.758, lng: -111.86 },
+  { lat: 40.753, lng: -111.82 },
+  { lat: 40.747, lng: -111.76 },
+  { lat: 40.742, lng: -111.70 },
+];
+
+// I-215 — partial beltway (south + west arc)
+const I215 = [
+  { lat: 40.770, lng: -111.935 }, // N — splits from I-15
+  { lat: 40.735, lng: -111.924 },
+  { lat: 40.704, lng: -111.928 },
+  { lat: 40.678, lng: -111.942 },
+  { lat: 40.658, lng: -111.963 },
+  { lat: 40.652, lng: -111.993 },
+  { lat: 40.658, lng: -112.022 },
+  { lat: 40.678, lng: -112.042 },
+  { lat: 40.712, lng: -112.052 },
+  { lat: 40.754, lng: -112.042 },
+  { lat: 40.772, lng: -112.020 }, // W — joins I-80
+];
+
+/* =============================================
+   COORDINATE HELPERS
+   ============================================= */
 function latLngToXY(lat, lng, W, H) {
   const { minLat, maxLat, minLng, maxLng } = MAP_BOUNDS;
   const x = ((lng - minLng) / (maxLng - minLng)) * W;
@@ -90,66 +213,86 @@ function latLngToXY(lat, lng, W, H) {
   return { x, y };
 }
 
+// Assign a deterministic SLC demo position to each request by index
 function getReqCoords(req) {
-  const city = (req.city || '').trim();
-  if (CITY_COORDS[city]) return CITY_COORDS[city];
-  const key = Object.keys(CITY_COORDS).find(
-    k => city.toLowerCase().includes(k.toLowerCase()) ||
-         k.toLowerCase().includes(city.toLowerCase())
-  );
-  return key ? CITY_COORDS[key] : null;
+  const idx = Store.requests.findIndex(r => r.id === req.id);
+  if (idx < 0) return null;
+  return DEMO_PIN_POSITIONS[idx % DEMO_PIN_POSITIONS.length];
 }
 
-/* ---- Pin color by days until event ---- */
+/* =============================================
+   PIN COLORS  (by days until event)
+   ============================================= */
 function pinColor(eventDate) {
   const today = new Date(); today.setHours(0, 0, 0, 0);
-  const ev = new Date(eventDate); ev.setHours(0, 0, 0, 0);
-  const days = Math.round((ev - today) / 86400000);
-  if (days < 0)   return '#94a3b8'; // past — slate
-  if (days <= 7)  return '#ef4444'; // this week — red
-  if (days <= 14) return '#f97316'; // 1–2 weeks — orange
-  if (days <= 30) return '#eab308'; // this month — yellow
-  return '#22c55e';                  // 30+ days — green
+  const ev    = new Date(eventDate); ev.setHours(0, 0, 0, 0);
+  const days  = Math.round((ev - today) / 86400000);
+  if (days < 0)   return '#94a3b8'; // past
+  if (days <= 7)  return '#ef4444'; // this week
+  if (days <= 14) return '#f97316'; // 1–2 weeks
+  if (days <= 30) return '#eab308'; // this month
+  return '#22c55e';                  // 30+ days
 }
 
 function daysLabel(eventDate) {
   const today = new Date(); today.setHours(0, 0, 0, 0);
-  const ev = new Date(eventDate); ev.setHours(0, 0, 0, 0);
-  const days = Math.round((ev - today) / 86400000);
+  const ev    = new Date(eventDate); ev.setHours(0, 0, 0, 0);
+  const days  = Math.round((ev - today) / 86400000);
   if (days < 0)   return `${Math.abs(days)}d ago`;
   if (days === 0) return 'Today';
   if (days === 1) return 'Tomorrow';
   return `in ${days}d`;
 }
 
-/* ---- Legend config ---- */
-const LEGEND = [
-  { color: '#ef4444', label: 'This week'   },
-  { color: '#f97316', label: '1–2 weeks'   },
-  { color: '#eab308', label: 'This month'  },
-  { color: '#22c55e', label: '30+ days'    },
-  { color: '#94a3b8', label: 'Past'        },
-  { color: '#2563eb', label: 'Selected'    }
-];
+/* =============================================
+   DRAWING HELPERS
+   ============================================= */
+function fillPolygon(ctx, points, fill, stroke, strokeW, W, H) {
+  ctx.beginPath();
+  points.forEach(({ lat, lng }, i) => {
+    const { x, y } = latLngToXY(lat, lng, W, H);
+    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  });
+  ctx.closePath();
+  if (fill)   { ctx.fillStyle = fill; ctx.fill(); }
+  if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = strokeW || 1; ctx.stroke(); }
+}
 
-/* ---- Draw a single pin ---- */
+function drawPolyline(ctx, points, color, lineW, W, H) {
+  ctx.strokeStyle = color;
+  ctx.lineWidth   = lineW;
+  ctx.lineCap     = 'round';
+  ctx.lineJoin    = 'round';
+  ctx.beginPath();
+  points.forEach(({ lat, lng }, i) => {
+    const { x, y } = latLngToXY(lat, lng, W, H);
+    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  });
+  ctx.stroke();
+}
+
+function drawInterstate(ctx, points, W, H) {
+  drawPolyline(ctx, points, '#ffffff', 4.0, W, H); // white casing
+  drawPolyline(ctx, points, '#f0cb34', 2.5, W, H); // yellow fill
+}
+
+/* =============================================
+   PIN DRAWING
+   ============================================= */
 function drawPin(ctx, x, y, color, radius, selected) {
-  // Drop shadow
   ctx.save();
-  ctx.shadowColor = 'rgba(0,0,0,0.28)';
-  ctx.shadowBlur = 4;
-  ctx.shadowOffsetY = 2;
+  ctx.shadowColor    = 'rgba(0,0,0,0.30)';
+  ctx.shadowBlur     = 5;
+  ctx.shadowOffsetY  = 2;
 
   if (selected) {
-    // Glow ring
     ctx.beginPath();
     ctx.arc(x, y, radius + 5, 0, Math.PI * 2);
     ctx.fillStyle = 'rgba(37,99,235,0.18)';
     ctx.fill();
-    // White outline
     ctx.beginPath();
     ctx.arc(x, y, radius + 2, 0, Math.PI * 2);
-    ctx.fillStyle = '#fff';
+    ctx.fillStyle = '#ffffff';
     ctx.fill();
   }
 
@@ -166,64 +309,159 @@ function drawPin(ctx, x, y, color, radius, selected) {
   ctx.fill();
 }
 
-/* ---- Draw state outlines ---- */
-function drawOutline(ctx, points, fillColor, strokeColor, W, H) {
-  ctx.beginPath();
-  points.forEach(({ lat, lng }, i) => {
-    const { x, y } = latLngToXY(lat, lng, W, H);
-    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-  });
-  ctx.closePath();
-  ctx.fillStyle = fillColor;
-  ctx.fill();
-  ctx.strokeStyle = strokeColor;
-  ctx.lineWidth = 1.5;
-  ctx.stroke();
-}
+/* =============================================
+   LEGEND
+   ============================================= */
+const LEGEND_ITEMS = [
+  { color: '#ef4444', label: 'This week'  },
+  { color: '#f97316', label: '1–2 weeks'  },
+  { color: '#eab308', label: 'This month' },
+  { color: '#22c55e', label: '30+ days'   },
+  { color: '#94a3b8', label: 'Past'       },
+  { color: '#2563eb', label: 'Selected'   },
+];
 
-/* ---- Draw legend ---- */
 function drawLegend(ctx, W, H) {
-  const pad = 7, dotR = 5, lineH = 16;
-  const boxW = 94, boxH = LEGEND.length * lineH + pad * 2;
-  const bx = W - boxW - 6, by = H - boxH - 6;
+  const pad = 7, dotR = 4.5, lineH = 15;
+  const boxW = 90, boxH = LEGEND_ITEMS.length * lineH + pad * 2;
+  const bx = W - boxW - 7, by = H - boxH - 7;
 
-  ctx.fillStyle = 'rgba(255,255,255,0.90)';
+  ctx.fillStyle = 'rgba(255,255,255,0.92)';
   ctx.roundRect(bx, by, boxW, boxH, 6);
   ctx.fill();
   ctx.strokeStyle = '#cbd5e1';
-  ctx.lineWidth = 1;
+  ctx.lineWidth = 0.8;
   ctx.stroke();
 
   ctx.textBaseline = 'middle';
-  LEGEND.forEach(({ color, label }, i) => {
+  LEGEND_ITEMS.forEach(({ color, label }, i) => {
     const cy = by + pad + i * lineH + lineH / 2;
     ctx.beginPath();
     ctx.arc(bx + pad + dotR, cy, dotR, 0, Math.PI * 2);
     ctx.fillStyle = color;
     ctx.fill();
-    ctx.font = '10px system-ui, sans-serif';
+    ctx.font = '9.5px system-ui, sans-serif';
     ctx.fillStyle = '#334155';
-    ctx.fillText(label, bx + pad + dotR * 2 + 5, cy);
+    ctx.fillText(label, bx + pad + dotR * 2 + 4, cy);
   });
 }
 
-/* ---- Core draw function — returns pin array ---- */
+/* =============================================
+   COMPASS ROSE  (top-right)
+   ============================================= */
+function drawCompass(ctx, W) {
+  const cx = W - 18, cy = 18, r = 10;
+  ctx.fillStyle = 'rgba(255,255,255,0.88)';
+  ctx.beginPath(); ctx.arc(cx, cy, r + 3, 0, Math.PI * 2); ctx.fill();
+  ctx.strokeStyle = '#cbd5e1'; ctx.lineWidth = 0.8; ctx.stroke();
+
+  // N arrow
+  ctx.fillStyle = '#ef4444';
+  ctx.beginPath();
+  ctx.moveTo(cx, cy - r);
+  ctx.lineTo(cx - 3.5, cy);
+  ctx.lineTo(cx + 3.5, cy);
+  ctx.closePath(); ctx.fill();
+  // S arrow
+  ctx.fillStyle = '#94a3b8';
+  ctx.beginPath();
+  ctx.moveTo(cx, cy + r);
+  ctx.lineTo(cx - 3.5, cy);
+  ctx.lineTo(cx + 3.5, cy);
+  ctx.closePath(); ctx.fill();
+  // N label
+  ctx.font = 'bold 7px system-ui, sans-serif';
+  ctx.fillStyle = '#1e293b';
+  ctx.textAlign  = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('N', cx, cy - r - 5);
+  ctx.textAlign = 'left';
+}
+
+/* =============================================
+   STREET GRID
+   ============================================= */
+function drawGrid(ctx, W, H) {
+  const { minLat, maxLat, minLng, maxLng } = MAP_BOUNDS;
+
+  // Minor streets
+  ctx.strokeStyle = '#e8e0d4';
+  ctx.lineWidth   = 0.35;
+  for (let lat = Math.ceil(minLat / 0.009) * 0.009; lat <= maxLat; lat += 0.009) {
+    const { y } = latLngToXY(lat, minLng, W, H);
+    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+  }
+  for (let lng = Math.ceil(minLng / 0.007) * 0.007; lng <= maxLng; lng += 0.007) {
+    const { x } = latLngToXY(minLat, lng, W, H);
+    ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
+  }
+
+  // Major arterials
+  ctx.strokeStyle = '#d4ccc0';
+  ctx.lineWidth   = 0.75;
+  for (let lat = Math.ceil(minLat / 0.027) * 0.027; lat <= maxLat; lat += 0.027) {
+    const { y } = latLngToXY(lat, minLng, W, H);
+    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+  }
+  for (let lng = Math.ceil(minLng / 0.021) * 0.021; lng <= maxLng; lng += 0.021) {
+    const { x } = latLngToXY(minLat, lng, W, H);
+    ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
+  }
+}
+
+/* =============================================
+   CITY LABEL
+   ============================================= */
+function drawCityLabel(ctx, W, H) {
+  const { x, y } = latLngToXY(40.762, -111.893, W, H);
+  ctx.font = 'bold 11px system-ui, sans-serif';
+  ctx.fillStyle = 'rgba(30,41,59,0.55)';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('Salt Lake City', x + 2, y + 20);
+  ctx.textAlign = 'left';
+}
+
+/* =============================================
+   CORE DRAW — returns pin hit array
+   ============================================= */
 function drawMapBase(canvas, selectedReq) {
   const ctx = canvas.getContext('2d');
   const W = canvas.width, H = canvas.height;
   ctx.clearRect(0, 0, W, H);
 
-  // Sky-blue background (represents surrounding water/area)
-  ctx.fillStyle = '#bfdbfe';
+  // 1 — base land color
+  ctx.fillStyle = '#f5f0e8';
   ctx.fillRect(0, 0, W, H);
 
-  // Missouri stub
-  drawOutline(ctx, MO_STUB, '#e2e8f0', '#94a3b8', W, H);
+  // 2 — Great Salt Lake
+  fillPolygon(ctx, GREAT_SALT_LAKE, '#aedff7', '#7ec8e3', 1, W, H);
 
-  // Illinois
-  drawOutline(ctx, IL_OUTLINE, '#f1f5f9', '#64748b', W, H);
+  // 3 — Wasatch Mountains
+  fillPolygon(ctx, WASATCH, '#b8d4a0', '#8fb87a', 1, W, H);
 
-  // Collect all pins
+  // 4 — Foothills
+  fillPolygon(ctx, FOOTHILLS, '#cfe8b4', null, 0, W, H);
+
+  // 5 — Street grid (drawn before roads so roads sit on top)
+  drawGrid(ctx, W, H);
+
+  // 6 — Airport (light gray)
+  fillPolygon(ctx, AIRPORT, '#dde3ea', '#c4cdd8', 0.8, W, H);
+
+  // 7 — Parks
+  PARKS.forEach(pts => fillPolygon(ctx, pts, '#a8d8a8', '#80c080', 0.8, W, H));
+
+  // 8 — Jordan River
+  drawPolyline(ctx, JORDAN_RIVER, '#7ec8e3', 1.4, W, H);
+
+  // 9 — Interstates (casings then fill)
+  [I15, I80, I215].forEach(route => drawInterstate(ctx, route, W, H));
+
+  // 10 — Subtle city label
+  drawCityLabel(ctx, W, H);
+
+  // 11 — Collect all pins
   const pins = Store.requests.map(req => {
     const coords = getReqCoords(req);
     if (!coords) return null;
@@ -231,75 +469,89 @@ function drawMapBase(canvas, selectedReq) {
     return { req, x, y };
   }).filter(Boolean);
 
-  // Draw non-selected pins first
+  // 12 — Non-selected pins first
   pins.forEach(({ req, x, y }) => {
     if (req.id === selectedReq.id) return;
     drawPin(ctx, x, y, pinColor(req.eventDate), 7, false);
   });
 
-  // Selected pin on top
+  // 13 — Selected pin on top (blue, larger)
   const selCoords = getReqCoords(selectedReq);
   if (selCoords) {
     const { x, y } = latLngToXY(selCoords.lat, selCoords.lng, W, H);
     drawPin(ctx, x, y, '#2563eb', 10, true);
   }
 
+  // 14 — Overlay elements
   drawLegend(ctx, W, H);
+  drawCompass(ctx, W);
+
+  // 15 — Canvas border
+  ctx.strokeStyle = '#cbd5e1';
+  ctx.lineWidth   = 1;
+  ctx.strokeRect(0.5, 0.5, W - 1, H - 1);
+
   return pins;
 }
 
-/* ---- Tooltip draw ---- */
+/* =============================================
+   HOVER TOOLTIP
+   ============================================= */
 function drawTooltip(ctx, pin, selectedReq, W, H) {
   const { req, x, y } = pin;
   const isSelected = req.id === selectedReq.id;
-
-  // Enlarge pin on hover
   const hoverR = isSelected ? 13 : 11;
+
   drawPin(ctx, x, y, isSelected ? '#2563eb' : pinColor(req.eventDate), hoverR, isSelected);
 
-  // Tooltip content
-  const today = new Date(); today.setHours(0, 0, 0, 0);
-  const ev = new Date(req.eventDate); ev.setHours(0, 0, 0, 0);
-  const days = Math.round((ev - today) / 86400000);
   const lines = [
-    { text: req.eventName,    bold: true,  color: '#fff'     },
-    { text: req.city,         bold: false, color: '#94a3b8'  },
-    { text: `${formatDate(req.eventDate)} · ${daysLabel(req.eventDate)}`, bold: false, color: '#cbd5e1' }
+    { text: req.eventName,   bold: true,  color: '#f8fafc' },
+    { text: req.city,        bold: false, color: '#94a3b8' },
+    { text: `${formatDate(req.eventDate)} · ${daysLabel(req.eventDate)}`, bold: false, color: '#cbd5e1' },
   ];
 
   const tPad = 9, lineH = 16;
   ctx.font = 'bold 11px system-ui, sans-serif';
-  const maxW = Math.max(...lines.map(l => ctx.measureText(l.text).width));
+
+  // Clamp event name width at 180px
+  const maxW = Math.min(
+    Math.max(...lines.map(l => { ctx.font = (l.bold ? 'bold ' : '') + '11px system-ui, sans-serif'; return ctx.measureText(l.text).width; })),
+    190
+  );
   const tW = maxW + tPad * 2;
   const tH = lines.length * lineH + tPad * 2;
 
-  let tx = x + 15;
+  let tx = x + 16;
   let ty = y - tH / 2;
-  if (tx + tW > W - 6) tx = x - tW - 15;
-  if (ty < 4)          ty = 4;
-  if (ty + tH > H - 4) ty = H - tH - 4;
+  if (tx + tW > W - 4) tx = x - tW - 16;
+  if (ty < 4)           ty = 4;
+  if (ty + tH > H - 4)  ty = H - tH - 4;
 
-  // Box
   ctx.fillStyle = 'rgba(15,23,42,0.93)';
   ctx.roundRect(tx, ty, tW, tH, 7);
   ctx.fill();
 
-  // Text
   ctx.textBaseline = 'top';
   lines.forEach(({ text, bold, color }, i) => {
-    ctx.font = (bold ? 'bold ' : '') + '11px system-ui, sans-serif';
+    ctx.font      = (bold ? 'bold ' : '') + '11px system-ui, sans-serif';
     ctx.fillStyle = color;
-    ctx.fillText(text, tx + tPad, ty + tPad + i * lineH);
+    // Clip long text
+    let t = text;
+    while (t.length > 3 && ctx.measureText(t).width > tW - tPad * 2) t = t.slice(0, -1);
+    if (t !== text) t += '…';
+    ctx.fillText(t, tx + tPad, ty + tPad + i * lineH);
   });
 }
 
-/* ---- Public: init minimap on a canvas element ---- */
+/* =============================================
+   PUBLIC API
+   ============================================= */
 function initMinimap(canvas, selectedReq) {
-  let pins = drawMapBase(canvas, selectedReq);
+  let pins    = drawMapBase(canvas, selectedReq);
   let hovered = null;
 
   function redraw(hoverPin) {
-    drawMapBase(canvas, selectedReq);
+    pins = drawMapBase(canvas, selectedReq);
     if (hoverPin) {
       const ctx = canvas.getContext('2d');
       drawTooltip(ctx, hoverPin, selectedReq, canvas.width, canvas.height);
@@ -307,7 +559,7 @@ function initMinimap(canvas, selectedReq) {
   }
 
   canvas.addEventListener('mousemove', (e) => {
-    const rect = canvas.getBoundingClientRect();
+    const rect  = canvas.getBoundingClientRect();
     const scaleX = canvas.width  / rect.width;
     const scaleY = canvas.height / rect.height;
     const mx = (e.clientX - rect.left) * scaleX;
