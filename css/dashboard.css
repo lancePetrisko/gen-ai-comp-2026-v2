@@ -70,6 +70,7 @@
 .card-icon.review { background: var(--c-warning-light); color: var(--c-warning); }
 .card-icon.approved { background: var(--c-success-light); color: var(--c-success); }
 .card-icon.fulfilled { background: #e0e7ff; color: #4338ca; }
+.card-icon.denied { background: var(--c-danger-light); color: var(--c-danger); }
 .card-icon.upcoming { background: var(--c-purple-light); color: var(--c-purple); }
 
 .card-info { display: flex; flex-direction: column; }
@@ -896,3 +897,163 @@
   flex-wrap: wrap;
 }
 .sm-match-footer .sm-assign-btn { margin-left: auto; }
+/* ---------- Providers Tab ---------- */
+.providers-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.providers-section {
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.providers-section-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  margin-bottom: 1.25rem;
+}
+.providers-section-icon-wrap {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+.alert-icon-wrap  { background: #fef3c7; }
+.bulk-icon-wrap   { background: #eff6ff; }
+.providers-section-header h3 { font-size: 1rem; margin-bottom: 0.2rem; }
+.providers-section-desc { font-size: 0.82rem; color: var(--c-text-secondary); }
+
+.providers-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+.providers-empty {
+  font-size: 0.88rem;
+  color: var(--c-text-secondary);
+  padding: 1rem 0;
+}
+
+/* Provider category card */
+.provider-cat-card {
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--c-bg);
+  transition: box-shadow var(--transition);
+}
+.provider-cat-card:hover { box-shadow: var(--shadow-md); }
+
+.provider-cat-header {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  user-select: none;
+  transition: background var(--transition);
+}
+.provider-cat-header:hover { background: var(--c-primary-light); }
+
+.provider-cat-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+.provider-cat-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+.provider-cat-info strong { font-size: 0.88rem; }
+
+.provider-cat-badge {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.15rem 0.45rem;
+  border-radius: 999px;
+}
+.badge-alert { background: #fef3c7; color: #92400e; }
+.badge-count { background: #eff6ff; color: var(--c-primary); }
+
+.provider-expand-chevron {
+  font-size: 1.1rem;
+  color: var(--c-text-secondary);
+  transition: transform 0.2s ease;
+  line-height: 1;
+}
+.provider-cat-card.expanded .provider-expand-chevron { transform: rotate(90deg); }
+
+/* Low stock items (shown in alert cards before provider list) */
+.provider-low-items {
+  padding: 0.5rem 1rem;
+  background: #fffbeb;
+  border-top: 1px solid #fde68a;
+  border-bottom: 1px solid #fde68a;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+.provider-low-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+}
+.provider-low-name { color: var(--c-text); }
+.provider-low-qty  { font-weight: 700; color: #b45309; }
+
+/* Provider list (collapsed by default) */
+.provider-list {
+  display: none;
+  flex-direction: column;
+  gap: 0;
+  border-top: 1px solid var(--c-border);
+}
+.provider-cat-card.expanded .provider-list { display: flex; }
+
+.provider-item {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--c-border);
+  background: var(--c-surface);
+}
+.provider-item:last-child { border-bottom: none; }
+
+.provider-item-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+  flex-wrap: wrap;
+}
+.provider-name  { font-size: 0.88rem; }
+.provider-phone { font-size: 0.8rem; color: var(--c-primary); font-weight: 600; }
+.provider-specialty { font-size: 0.8rem; color: var(--c-text-secondary); margin-bottom: 0.4rem; }
+
+.provider-meta  { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.provider-meta-tag {
+  font-size: 0.75rem;
+  background: var(--c-bg);
+  border: 1px solid var(--c-border);
+  border-radius: 999px;
+  padding: 0.15rem 0.55rem;
+  color: var(--c-text-secondary);
+}
