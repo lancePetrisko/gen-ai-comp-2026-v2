@@ -74,6 +74,7 @@
 .badge-approved { background: var(--c-success-light); color: #166534; }
 .badge-qualtrics { background: #e0e7ff; color: #3730a3; }
 .badge-fulfilled { background: #f0fdf4; color: #14532d; border: 1px solid #86efac; }
+.badge-denied { background: var(--c-danger-light); color: #991b1b; border: 1px solid #fca5a5; }
 
 .badge-low { background: #f0fdf4; color: #166534; }
 .badge-medium { background: var(--c-warning-light); color: #92400e; }

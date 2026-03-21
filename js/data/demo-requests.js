@@ -162,7 +162,7 @@ const DEMO_REQUESTS = [
     materials: ['Brochures', 'Educational Toolkit'],
     staffSupport: 'None',
     additionalNotes: 'Out of state event. Only requesting printed materials to include in attendee packets.',
-    status: 'Submitted'
+    status: 'Denied'
   },
   {
     requestorName: 'Robert Nguyen',

@@ -70,6 +70,7 @@
 .card-icon.review { background: var(--c-warning-light); color: var(--c-warning); }
 .card-icon.approved { background: var(--c-success-light); color: var(--c-success); }
 .card-icon.fulfilled { background: #e0e7ff; color: #4338ca; }
+.card-icon.denied { background: var(--c-danger-light); color: var(--c-danger); }
 .card-icon.upcoming { background: var(--c-purple-light); color: var(--c-purple); }
 
 .card-info { display: flex; flex-direction: column; }

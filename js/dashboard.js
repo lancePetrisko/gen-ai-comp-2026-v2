@@ -44,6 +44,7 @@ function updateSummaryCounts() {
   document.getElementById('count-review').textContent = r.filter(x => x.status === 'In Review').length;
   document.getElementById('count-approved').textContent = r.filter(x => x.status === 'Approved').length;
   document.getElementById('count-fulfilled').textContent = r.filter(x => x.status === 'Fulfilled').length;
+  document.getElementById('count-denied').textContent = r.filter(x => x.status === 'Denied').length;
 
   const now = new Date();
   const in30 = new Date(now);
@@ -314,6 +315,7 @@ function renderDetailPanel(req) {
             <option ${req.status === 'Approved' ? 'selected' : ''}>Approved</option>
             <option ${req.status === 'Sent to Qualtrics' ? 'selected' : ''}>Sent to Qualtrics</option>
             <option ${req.status === 'Fulfilled' ? 'selected' : ''}>Fulfilled</option>
+            <option ${req.status === 'Denied' ? 'selected' : ''}>Denied</option>
           </select>
         </div>
         <div class="admin-field">
