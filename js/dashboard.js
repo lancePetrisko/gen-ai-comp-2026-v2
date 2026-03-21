@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initSort();
   initTabs();
   initSummaryCardClicks();
+  initManagement();
   refreshDashboard();
 });
 
@@ -33,6 +34,7 @@ function refreshDashboard() {
   renderPlanning();
   renderReporting();
   renderAssets();
+  renderManagement();
   renderProviders();
 }
 
