@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | Community Health Platform</title>
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/navbar.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/dashboard.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <a href="../index.html" class="nav-brand">
+      <svg class="nav-logo" viewBox="0 0 32 32" width="28" height="28" aria-hidden="true">
+        <circle cx="16" cy="16" r="14" fill="#2563eb" opacity="0.15"/>
+        <path d="M16 6a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 3a2 2 0 1 1 0 4 2 2 0 0 1 0-4zm-1 6h2v7h-2z" fill="#2563eb"/>
+        <path d="M10 18c0-3.3 2.7-6 6-6s6 2.7 6 6" fill="none" stroke="#2563eb" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      <span>Community Health Platform</span>
+    </a>
+    <div class="nav-links">
+      <a href="../index.html" class="nav-link">
+        <svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><path d="M4 4h12v2H4zm0 4h12v2H4zm0 4h8v2H4z" fill="currentColor"/></svg>
+        Intake Form
+      </a>
+      <a href="dashboard.html" class="nav-link active" aria-current="page">
+        <svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><path d="M3 3h6v8H3zm8 0h6v5h-6zm0 7h6v7h-6zM3 13h6v4H3z" fill="currentColor"/></svg>
+        Admin Dashboard
+      </a>
+    </div>
+  </nav>
+
+  <!-- Dashboard -->
+  <main>
+    <div class="dashboard-container">
+
+      <!-- Header -->
+      <div class="dash-header">
+        <div>
+          <h1>Admin Dashboard</h1>
+          <p class="dash-subtitle">Community Health Event Request Operations</p>
+        </div>
+        <div class="dash-header-actions">
+          <div class="search-box">
+            <svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><circle cx="8" cy="8" r="6" fill="none" stroke="currentColor" stroke-width="2"/><path d="M13 13l4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            <input type="search" id="dash-search" placeholder="Search requests…" aria-label="Search requests">
+          </div>
+        </div>
+      </div>
+
+      <!-- Summary Cards -->
+      <section class="summary-cards" aria-label="Request summary">
+        <div class="summary-card" data-filter-status="all">
+          <div class="card-icon total"><svg viewBox="0 0 24 24" width="24" height="24"><path d="M4 4h16v16H4z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 10h8M8 14h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+          <div class="card-info"><span class="card-count" id="count-total">0</span><span class="card-label">Total Requests</span></div>
+        </div>
+        <div class="summary-card" data-filter-status="Submitted">
+          <div class="card-icon new"><svg viewBox="0 0 24 24" width="24" height="24"><circle cx="12" cy="12" r="4" fill="currentColor"/></svg></div>
+          <div class="card-info"><span class="card-count" id="count-new">0</span><span class="card-label">New / Unread</span></div>
+        </div>
+        <div class="summary-card" data-filter-status="In Review">
+          <div class="card-icon review"><svg viewBox="0 0 24 24" width="24" height="24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 7v5l3 3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
+          <div class="card-info"><span class="card-count" id="count-review">0</span><span class="card-label">In Review</span></div>
+        </div>
+        <div class="summary-card" data-filter-status="Approved">
+          <div class="card-icon approved"><svg viewBox="0 0 24 24" width="24" height="24"><path d="M5 13l4 4L19 7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="card-info"><span class="card-count" id="count-approved">0</span><span class="card-label">Approved</span></div>
+        </div>
+        <div class="summary-card" data-filter-status="Fulfilled">
+          <div class="card-icon fulfilled"><svg viewBox="0 0 24 24" width="24" height="24"><path d="M4 12l5 5L20 6" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></div>
+          <div class="card-info"><span class="card-count" id="count-fulfilled">0</span><span class="card-label">Fulfilled</span></div>
+        </div>
+        <div class="summary-card">
+          <div class="card-icon upcoming"><svg viewBox="0 0 24 24" width="24" height="24"><rect x="3" y="4" width="18" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3 10h18M8 2v4M16 2v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
+          <div class="card-info"><span class="card-count" id="count-upcoming">0</span><span class="card-label">Upcoming (30 days)</span></div>
+        </div>
+      </section>
+
+      <!-- Tabs -->
+      <div class="dash-tabs" role="tablist" aria-label="Dashboard sections">
+        <button class="dash-tab active" role="tab" aria-selected="true" data-tab="queue">Request Queue</button>
+        <button class="dash-tab" role="tab" aria-selected="false" data-tab="planning">Planning</button>
+        <button class="dash-tab" role="tab" aria-selected="false" data-tab="reporting">Reporting</button>
+        <button class="dash-tab" role="tab" aria-selected="false" data-tab="assets">Assets</button>
+      </div>
+
+      <!-- TAB: Request Queue -->
+      <div class="tab-panel active" id="tab-queue" role="tabpanel">
+        <div class="queue-layout">
+          <div class="queue-filters">
+            <h3>Filters</h3>
+            <div class="filter-group">
+              <label for="filter-status">Status</label>
+              <select id="filter-status"><option value="">All</option><option>Submitted</option><option>In Review</option><option>Approved</option><option>Sent to Qualtrics</option><option>Fulfilled</option></select>
+            </div>
+            <div class="filter-group">
+              <label for="filter-type">Request Type</label>
+              <select id="filter-type"><option value="">All</option><option>Staffed Event Support</option><option>Materials Only</option><option>Toolkit Request</option><option>Staffing + Materials</option><option>Consultation</option></select>
+            </div>
+            <div class="filter-group">
+              <label for="filter-fulfillment">Fulfillment</label>
+              <select id="filter-fulfillment"><option value="">All</option><option>Staff Deployment</option><option>Mail</option><option>Pickup</option><option>Flexible</option></select>
+            </div>
+            <div class="filter-group">
+              <label for="filter-category">Category</label>
+              <select id="filter-category"><option value="">All</option><option>Community Outreach</option><option>Internal Program</option><option>School Event</option><option>Health Education</option><option>Fundraising</option><option>Partner Request</option><option>Special Event</option></select>
+            </div>
+            <div class="filter-group">
+              <label for="filter-priority">Priority</label>
+              <select id="filter-priority"><option value="">All</option><option>Low</option><option>Medium</option><option>High</option><option>Urgent</option></select>
+            </div>
+            <div class="filter-group">
+              <label for="filter-area">Service Area</label>
+              <select id="filter-area"><option value="">All</option><option value="In Area">In Service Area</option><option value="Out of Area">Out of Service Area</option><option value="Review Needed">Review Needed</option></select>
+            </div>
+            <button class="btn btn-ghost btn-sm" id="btn-clear-filters">Clear Filters</button>
+          </div>
+
+          <div class="queue-table-wrap">
+            <table class="queue-table" aria-label="Request queue">
+              <thead>
+                <tr>
+                  <th scope="col" data-sort="id" class="sortable">ID</th>
+                  <th scope="col" data-sort="eventName" class="sortable">Event</th>
+                  <th scope="col" data-sort="organization" class="sortable">Organization</th>
+                  <th scope="col" data-sort="eventDate" class="sortable">Date</th>
+                  <th scope="col" data-sort="status" class="sortable">Status</th>
+                  <th scope="col" data-sort="aiCategory" class="sortable">Category</th>
+                  <th scope="col" data-sort="aiPriority" class="sortable">Priority</th>
+                  <th scope="col" data-sort="serviceArea" class="sortable">Area</th>
+                </tr>
+              </thead>
+              <tbody id="queue-tbody"></tbody>
+            </table>
+            <div class="queue-empty" id="queue-empty" hidden>
+              <p>No requests match your filters.</p>
+            </div>
+          </div>
+
+          <div class="detail-panel" id="detail-panel" hidden>
+            <div class="detail-header">
+              <h3 id="detail-title">Request Details</h3>
+              <button class="btn-close" id="btn-close-detail" aria-label="Close detail panel">&times;</button>
+            </div>
+            <div class="detail-body" id="detail-body"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB: Planning -->
+      <div class="tab-panel" id="tab-planning" role="tabpanel" hidden>
+        <div class="planning-layout">
+          <div class="planning-section">
+            <h3>Upcoming Events Timeline</h3>
+            <div id="planning-timeline" class="timeline-list"></div>
+          </div>
+          <div class="planning-section">
+            <h3>Staffing Demand</h3>
+            <div id="planning-staffing" class="staffing-grid"></div>
+          </div>
+          <div class="planning-section">
+            <h3>Mail Fulfillment Queue</h3>
+            <div id="planning-mail" class="mail-queue"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB: Reporting -->
+      <div class="tab-panel" id="tab-reporting" role="tabpanel" hidden>
+        <div class="reporting-layout">
+          <div class="report-card">
+            <h3>Requests by Status</h3>
+            <div class="chart-wrap"><canvas id="chart-status" width="240" height="240" aria-label="Donut chart of requests by status"></canvas></div>
+            <div id="legend-status" class="chart-legend"></div>
+          </div>
+          <div class="report-card">
+            <h3>Requests by Category</h3>
+            <div class="chart-wrap"><canvas id="chart-category" width="240" height="240" aria-label="Donut chart of requests by category"></canvas></div>
+            <div id="legend-category" class="chart-legend"></div>
+          </div>
+          <div class="report-card">
+            <h3>Requests by Fulfillment Path</h3>
+            <div class="chart-wrap"><canvas id="chart-fulfillment" width="240" height="240" aria-label="Donut chart of requests by fulfillment path"></canvas></div>
+            <div id="legend-fulfillment" class="chart-legend"></div>
+          </div>
+          <div class="report-card">
+            <h3>Service Area Distribution</h3>
+            <div class="chart-wrap"><canvas id="chart-area" width="240" height="240" aria-label="Donut chart of service area distribution"></canvas></div>
+            <div id="legend-area" class="chart-legend"></div>
+          </div>
+          <div class="report-card full-width">
+            <h3>Workload Trend (Submissions per Week)</h3>
+            <div class="chart-wrap bar-wrap"><canvas id="chart-workload" width="600" height="200" aria-label="Bar chart of weekly workload"></canvas></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB: Assets -->
+      <div class="tab-panel" id="tab-assets" role="tabpanel" hidden>
+        <div class="assets-layout" id="assets-grid"></div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Event Invite Modal -->
+  <div class="modal-overlay" id="modal-overlay" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div class="modal-header">
+        <h3 id="modal-title">Create Event Invite</h3>
+        <button class="btn-close" id="btn-close-modal" aria-label="Close modal">&times;</button>
+      </div>
+      <div class="modal-body" id="modal-body"></div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" id="btn-send-invite">Generate &amp; Send Invite</button>
+        <button class="btn btn-ghost" id="btn-cancel-modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast" hidden aria-live="polite"></div>
+
+  <!-- Scripts (order matters: dependencies first) -->
+  <script src="../js/store.js"></script>
+  <script src="../js/helpers.js"></script>
+  <script src="../js/ai.js"></script>
+  <script src="../js/data/demo-requests.js"></script>
+  <script src="../js/data/assets.js"></script>
+  <script src="../js/charts.js"></script>
+  <script src="../js/dashboard.js"></script>
+</body>
+</html>

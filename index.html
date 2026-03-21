@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Event &amp; Material Request | Intermountain Health</title>
+  <link rel="icon" type="image/jpeg" href="assets/logos/intermouintainHealthLogo_purple.jpeg">
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/navbar.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/forms.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <a href="index.html" class="nav-brand">
+      <svg class="nav-logo" viewBox="0 0 32 32" width="28" height="28" aria-hidden="true">
+        <circle cx="16" cy="16" r="14" fill="#2563eb" opacity="0.15"/>
+        <path d="M16 6a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 3a2 2 0 1 1 0 4 2 2 0 0 1 0-4zm-1 6h2v7h-2z" fill="#2563eb"/>
+        <path d="M10 18c0-3.3 2.7-6 6-6s6 2.7 6 6" fill="none" stroke="#2563eb" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      <span>Community Health Platform</span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link active" aria-current="page">
+        <svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><path d="M4 4h12v2H4zm0 4h12v2H4zm0 4h8v2H4z" fill="currentColor"/></svg>
+        Intake Form
+      </a>
+      <a href="pages/dashboard.html" class="nav-link">
+        <svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><path d="M3 3h6v8H3zm8 0h6v5h-6zm0 7h6v7h-6zM3 13h6v4H3z" fill="currentColor"/></svg>
+        Admin Dashboard
+      </a>
+    </div>
+  </nav>
+
+  <!-- Intake Form Page -->
+  <main>
+    <div class="intake-container">
+      <div class="intake-header">
+        <h1>Event &amp; Material Request</h1>
+        <p class="intake-subtitle">Submit a request for community health event support, materials, or staffing. Our team will review and respond within 2 business days.</p>
+      </div>
+
+      <!-- Demo Loader -->
+      <div class="demo-loader-wrap">
+        <label for="demo-select" class="demo-label">
+          <svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><path d="M10 2a1 1 0 0 1 .78.37l2 2.5A1 1 0 0 1 12 6H8a1 1 0 0 1-.78-1.63l2-2.5A1 1 0 0 1 10 2zM4 8h12a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-6a2 2 0 0 1 2-2z" fill="currentColor"/></svg>
+          Load demo request
+        </label>
+        <select id="demo-select" aria-label="Load a demo request to auto-fill the form">
+          <option value="">— Select a demo scenario —</option>
+        </select>
+        <span class="demo-hint">AI-assisted demo examples for presentation purposes</span>
+      </div>
+
+      <!-- Intake Form -->
+      <form id="intake-form" novalidate>
+        <!-- Section: Requestor Info -->
+        <fieldset class="form-section">
+          <legend>Requestor Information</legend>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="f-name">Full Name <span class="req" aria-label="required">*</span></label>
+              <input type="text" id="f-name" name="requestorName" required autocomplete="name">
+            </div>
+            <div class="form-group">
+              <label for="f-org">Organization <span class="req" aria-label="required">*</span></label>
+              <input type="text" id="f-org" name="organization" required>
+            </div>
+            <div class="form-group">
+              <label for="f-email">Email <span class="req" aria-label="required">*</span></label>
+              <input type="email" id="f-email" name="email" required autocomplete="email">
+            </div>
+            <div class="form-group">
+              <label for="f-phone">Phone</label>
+              <input type="tel" id="f-phone" name="phone" autocomplete="tel" placeholder="(555) 123-4567">
+              <span class="helper-text">Optional — for urgent follow-up only</span>
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- Section: Event Details -->
+        <fieldset class="form-section">
+          <legend>Event Details</legend>
+          <div class="form-grid">
+            <div class="form-group full-width">
+              <label for="f-event-name">Event or Program Name <span class="req" aria-label="required">*</span></label>
+              <input type="text" id="f-event-name" name="eventName" required placeholder="e.g., Annual Wellness Fair">
+            </div>
+            <div class="form-group full-width">
+              <label for="f-event-desc">Event Description <span class="req" aria-label="required">*</span></label>
+              <textarea id="f-event-desc" name="eventDescription" required rows="3" placeholder="Describe the event, its purpose, and what support you need..."></textarea>
+              <span class="helper-text">Be as specific as possible so we can tailor our support</span>
+            </div>
+            <div class="form-group">
+              <label for="f-event-date">Event Date <span class="req" aria-label="required">*</span></label>
+              <input type="date" id="f-event-date" name="eventDate" required>
+            </div>
+            <div class="form-group">
+              <label for="f-start-time">Start Time <span class="req" aria-label="required">*</span></label>
+              <input type="time" id="f-start-time" name="startTime" required>
+            </div>
+            <div class="form-group">
+              <label for="f-end-time">End Time <span class="req" aria-label="required">*</span></label>
+              <input type="time" id="f-end-time" name="endTime" required>
+            </div>
+            <div class="form-group full-width">
+              <label for="f-location">Event Location / Venue <span class="req" aria-label="required">*</span></label>
+              <input type="text" id="f-location" name="eventLocation" required placeholder="e.g., Springfield Community Center, 100 Main St">
+            </div>
+            <div class="form-group">
+              <label for="f-city">City <span class="req" aria-label="required">*</span></label>
+              <input type="text" id="f-city" name="city" required>
+            </div>
+            <div class="form-group">
+              <label for="f-zip">ZIP Code <span class="req" aria-label="required">*</span></label>
+              <input type="text" id="f-zip" name="zipCode" required pattern="[0-9]{5}" maxlength="5" placeholder="e.g., 62701">
+              <span class="helper-text">Used to determine service area eligibility</span>
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- Section: Request Details -->
+        <fieldset class="form-section">
+          <legend>Request Details</legend>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="f-audience">Audience Type <span class="req" aria-label="required">*</span></label>
+              <select id="f-audience" name="audienceType" required>
+                <option value="">Select audience…</option>
+                <option value="General Public">General Public</option>
+                <option value="K-12 Students">K-12 Students</option>
+                <option value="College Students">College Students</option>
+                <option value="Seniors">Seniors (65+)</option>
+                <option value="Families">Families</option>
+                <option value="Healthcare Workers">Healthcare Workers</option>
+                <option value="Faith Community">Faith Community</option>
+                <option value="Employees">Employees / Internal</option>
+                <option value="Mixed">Mixed / Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="f-attendance">Estimated Attendance <span class="req" aria-label="required">*</span></label>
+              <input type="number" id="f-attendance" name="estimatedAttendance" required min="1" max="50000" placeholder="e.g., 150">
+            </div>
+            <div class="form-group">
+              <label for="f-request-type">Type of Request <span class="req" aria-label="required">*</span></label>
+              <select id="f-request-type" name="requestType" required>
+                <option value="">Select request type…</option>
+                <option value="Staffed Event Support">Staffed Event Support</option>
+                <option value="Materials Only">Materials Only (Mail/Pickup)</option>
+                <option value="Toolkit Request">Toolkit Request</option>
+                <option value="Staffing + Materials">Staffing + Materials</option>
+                <option value="Consultation">Consultation / Planning</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="f-fulfillment">Preferred Fulfillment <span class="req" aria-label="required">*</span></label>
+              <select id="f-fulfillment" name="preferredFulfillment" required>
+                <option value="">Select fulfillment method…</option>
+                <option value="Staff Deployment">Staff Deployment to Event</option>
+                <option value="Mail">Mail Materials to Address</option>
+                <option value="Pickup">Pickup from Office</option>
+                <option value="Flexible">Flexible / No Preference</option>
+              </select>
+            </div>
+            <div class="form-group full-width">
+              <label>Materials / Toolkit Needs</label>
+              <div class="checkbox-grid" role="group" aria-label="Select materials needed">
+                <label class="checkbox-label"><input type="checkbox" name="materials" value="Flyers"> Flyers</label>
+                <label class="checkbox-label"><input type="checkbox" name="materials" value="Brochures"> Brochures</label>
+                <label class="checkbox-label"><input type="checkbox" name="materials" value="Giveaway Kits"> Giveaway Kits</label>
+                <label class="checkbox-label"><input type="checkbox" name="materials" value="Educational Toolkit"> Educational Toolkit</label>
+                <label class="checkbox-label"><input type="checkbox" name="materials" value="Banner/Signage"> Banner / Signage</label>
+                <label class="checkbox-label"><input type="checkbox" name="materials" value="Table/Display"> Table / Display</label>
+                <label class="checkbox-label"><input type="checkbox" name="materials" value="AV Equipment"> AV Equipment</label>
+                <label class="checkbox-label"><input type="checkbox" name="materials" value="Screening Supplies"> Screening Supplies</label>
+              </div>
+            </div>
+            <div class="form-group full-width">
+              <label id="staff-support-label">Staff Support Requested</label>
+              <div class="radio-group" role="radiogroup" aria-labelledby="staff-support-label">
+                <label class="radio-label"><input type="radio" name="staffSupport" value="None"> None needed</label>
+                <label class="radio-label"><input type="radio" name="staffSupport" value="1-2 Staff"> 1–2 Staff</label>
+                <label class="radio-label"><input type="radio" name="staffSupport" value="3-5 Staff"> 3–5 Staff</label>
+                <label class="radio-label"><input type="radio" name="staffSupport" value="5+ Staff"> 5+ Staff</label>
+              </div>
+            </div>
+            <div class="form-group full-width">
+              <label for="f-notes">Additional Notes</label>
+              <textarea id="f-notes" name="additionalNotes" rows="3" placeholder="Any other details, special needs, or questions..."></textarea>
+            </div>
+          </div>
+        </fieldset>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary btn-lg">
+            <svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><path d="M3 10l5 5L17 5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Submit Request
+          </button>
+          <button type="reset" class="btn btn-ghost">Clear Form</button>
+        </div>
+      </form>
+
+      <!-- Submission Confirmation -->
+      <div id="intake-confirmation" class="confirmation-panel" hidden>
+        <div class="confirmation-icon" aria-hidden="true">
+          <svg viewBox="0 0 80 80" width="80" height="80">
+            <circle cx="40" cy="40" r="38" fill="#dcfce7" stroke="#22c55e" stroke-width="3"/>
+            <path d="M24 42l10 10 22-24" fill="none" stroke="#16a34a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h2>Submitted!</h2>
+        <p class="confirmation-text">Your request has been received and will be reviewed by the Community Health team. You'll receive a confirmation email with your request ID shortly.</p>
+        <div class="confirmation-id">Request ID: <strong id="confirm-request-id"></strong></div>
+        <button class="btn btn-outline" id="btn-new-request">Submit Another Request</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Toast -->
+  <div class="toast" id="toast" hidden aria-live="polite"></div>
+
+  <!-- Scripts (order matters: dependencies first) -->
+  <script src="js/store.js"></script>
+  <script src="js/helpers.js"></script>
+  <script src="js/ai.js"></script>
+  <script src="js/data/demo-requests.js"></script>
+  <script src="js/intake.js"></script>
+</body>
+</html>

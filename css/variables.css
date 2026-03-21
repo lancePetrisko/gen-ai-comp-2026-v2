@@ -1,0 +1,30 @@
+/* =============================================
+   Design Tokens & CSS Variables
+   ============================================= */
+
+:root {
+  --c-bg: #f4f6f9;
+  --c-surface: #ffffff;
+  --c-border: #e2e5ea;
+  --c-text: #1e293b;
+  --c-text-secondary: #64748b;
+  --c-primary: #2563eb;
+  --c-primary-hover: #1d4ed8;
+  --c-primary-light: #eff6ff;
+  --c-success: #16a34a;
+  --c-success-light: #dcfce7;
+  --c-warning: #d97706;
+  --c-warning-light: #fef3c7;
+  --c-danger: #dc2626;
+  --c-danger-light: #fee2e2;
+  --c-info: #0891b2;
+  --c-info-light: #cffafe;
+  --c-purple: #7c3aed;
+  --c-purple-light: #f3e8ff;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+  --radius: 8px;
+  --radius-lg: 12px;
+  --transition: 0.2s ease;
+}

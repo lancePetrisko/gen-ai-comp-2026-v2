@@ -1,0 +1,19 @@
+/* =============================================
+   Responsive Breakpoints
+   ============================================= */
+
+@media (max-width: 900px) {
+  .queue-layout { grid-template-columns: 1fr; }
+  .queue-layout.has-detail { grid-template-columns: 1fr; }
+  .queue-filters {
+    position: static;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 0.5rem;
+  }
+  .queue-filters h3 { grid-column: 1 / -1; }
+  .detail-panel { position: static; max-height: none; }
+  .planning-layout { grid-template-columns: 1fr; }
+  .form-grid { grid-template-columns: 1fr; }
+  .nav-brand span { display: none; }
+}
