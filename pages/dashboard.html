@@ -84,6 +84,7 @@
         <button class="dash-tab" role="tab" aria-selected="false" data-tab="planning">Planning</button>
         <button class="dash-tab" role="tab" aria-selected="false" data-tab="reporting">Reporting</button>
         <button class="dash-tab" role="tab" aria-selected="false" data-tab="assets">Assets</button>
+        <button class="dash-tab" role="tab" aria-selected="false" data-tab="management">Management</button>
       </div>
 
       <!-- TAB: Request Queue -->
@@ -202,6 +203,62 @@
         <div class="assets-layout" id="assets-grid"></div>
       </div>
 
+      <!-- TAB: Management -->
+      <div class="tab-panel" id="tab-management" role="tabpanel" hidden>
+        <!-- Summary strip -->
+        <div class="mgmt-summary-strip">
+          <div class="mgmt-stat-chip">
+            <span class="chip-dot" style="background:#94a3b8;"></span>
+            <span class="chip-val" id="mgmt-stat-total">0</span>
+            <span>Total Staff</span>
+          </div>
+          <div class="mgmt-stat-chip">
+            <span class="chip-dot" style="background:var(--c-success);"></span>
+            <span class="chip-val" id="mgmt-stat-avail">0</span>
+            <span>Available</span>
+          </div>
+          <div class="mgmt-stat-chip">
+            <span class="chip-dot" style="background:var(--c-primary);"></span>
+            <span class="chip-val" id="mgmt-stat-working">0</span>
+            <span>Actively Working</span>
+          </div>
+          <div class="mgmt-stat-chip">
+            <span class="chip-dot" style="background:var(--c-warning);"></span>
+            <span class="chip-val" id="mgmt-stat-break">0</span>
+            <span>On Break</span>
+          </div>
+        </div>
+        <!-- Filter bar -->
+        <div class="mgmt-filter-bar">
+          <input type="text" id="mgmt-search" class="mgmt-search-input" placeholder="Search by name, title, or skill…">
+          <select id="mgmt-filter-skill" class="mgmt-select">
+            <option value="">All Skills</option>
+            <option value="childcare">Childcare</option>
+            <option value="eldercare">Eldercare</option>
+            <option value="school events">School Events</option>
+            <option value="community outreach">Community Outreach</option>
+            <option value="behavior reinforcement">Behavior Support</option>
+            <option value="translation">Translation</option>
+          </select>
+          <select id="mgmt-filter-status" class="mgmt-select">
+            <option value="">All Statuses</option>
+            <option value="Available">Available</option>
+            <option value="Actively Working">Actively Working</option>
+            <option value="On Break">On Break</option>
+            <option value="Unavailable">Unavailable</option>
+          </select>
+          <select id="mgmt-filter-rating" class="mgmt-select">
+            <option value="">Any Rating</option>
+            <option value="4.5">4.5+</option>
+            <option value="4.0">4.0+</option>
+            <option value="3.5">3.5+</option>
+          </select>
+          <button class="btn btn-ghost btn-sm" id="mgmt-clear-filters">Clear</button>
+        </div>
+        <!-- Staff grid -->
+        <div id="mgmt-staff-grid" class="mgmt-staff-grid"></div>
+      </div>
+
     </div>
   </main>
 
@@ -234,7 +291,9 @@
   <script src="../js/ai.js"></script>
   <script src="../js/data/demo-requests.js"></script>
   <script src="../js/data/assets.js"></script>
+  <script src="../js/data/staff.js"></script>
   <script src="../js/charts.js"></script>
+  <script src="../js/management.js"></script>
   <script src="../js/dashboard.js"></script>
 </body>
 </html>
