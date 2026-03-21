@@ -18,7 +18,9 @@ Community Health Event Request System — a proof-of-concept web app for a Gen A
 │   └── logos/                  ← Tab icons (favicons) and navbar logos
 ├── pages/
 │   ├── login.html              ← Demo admin login (pre-filled credentials, no real auth)
-│   └── dashboard.html          ← Admin Dashboard (separate page)
+│   ├── dashboard.html          ← Admin Dashboard (separate page)
+│   ├── user-login.html         ← User portal login (select a demo requestor)
+│   └── user-dashboard.html     ← User Dashboard (read-only view of user's requests)
 ├── css/
 │   ├── variables.css           ← Design tokens & CSS custom properties
 │   ├── base.css                ← Reset, typography, body
@@ -33,6 +35,7 @@ Community Health Event Request System — a proof-of-concept web app for a Gen A
 │   ├── ai.js                   ← AI simulation engine + processNewRequest()
 │   ├── intake.js               ← Intake page logic (demo loader, validation, submit)
 │   ├── dashboard.js            ← Dashboard page logic (queue, filters, detail, planning, reporting, assets)
+│   ├── user-dashboard.js        ← User dashboard logic (read-only, status tracker, staff display)
 │   ├── charts.js               ← Canvas chart rendering (donut + bar)
 │   └── data/
 │       ├── demo-requests.js    ← 12 demo request scenarios + DEMO_SELECT_OPTIONS

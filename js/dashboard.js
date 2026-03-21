@@ -241,8 +241,29 @@ function selectRequest(id) {
 
   renderDetailPanel(req);
 
+  // Map toggle
+  const mapWrap   = document.getElementById('detail-map-wrap');
+  const mapCanvas = document.getElementById('detail-minimap');
+  const mapBtn    = document.getElementById('btn-map-toggle');
+  let mapInited   = false;
+
+  mapWrap.hidden = true;
+  mapBtn.classList.remove('active');
+
+  mapBtn.onclick = () => {
+    const showing = !mapWrap.hidden;
+    mapWrap.hidden = showing;
+    mapBtn.classList.toggle('active', !showing);
+    if (!showing && !mapInited) {
+      mapInited = true;
+      initMinimap(mapCanvas, req);
+    }
+  };
+
   document.getElementById('btn-close-detail').onclick = () => {
     panel.hidden = true;
+    mapWrap.hidden = true;
+    mapBtn.classList.remove('active');
     layout.classList.remove('has-detail');
     Store.selectedId = null;
     document.querySelectorAll('.queue-table tbody tr').forEach(tr => tr.classList.remove('selected'));

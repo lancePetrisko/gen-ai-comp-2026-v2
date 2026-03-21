@@ -25,6 +25,10 @@
         <svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><path d="M4 4h12v2H4zm0 4h12v2H4zm0 4h8v2H4z" fill="currentColor"/></svg>
         Intake Form
       </a>
+      <a href="user-login.html" class="nav-link">
+        <svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><path d="M10 2a5 5 0 0 1 5 5v1a5 5 0 0 1-10 0V7a5 5 0 0 1 5-5zm-7 16a7 7 0 0 1 14 0" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>
+        User Portal
+      </a>
       <a href="login.html" class="nav-link active" aria-current="page">
         <svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><path d="M3 3h6v8H3zm8 0h6v5h-6zm0 7h6v7h-6zM3 13h6v4H3z" fill="currentColor"/></svg>
         Admin Dashboard
@@ -148,7 +152,19 @@
           <div class="detail-panel" id="detail-panel" hidden>
             <div class="detail-header">
               <h3 id="detail-title">Request Details</h3>
-              <button class="btn-close" id="btn-close-detail" aria-label="Close detail panel">&times;</button>
+              <div class="detail-header-actions">
+                <button class="btn-map-toggle" id="btn-map-toggle" aria-label="Toggle event map" title="View event map">
+                  <svg viewBox="0 0 20 20" width="16" height="16" fill="none" aria-hidden="true">
+                    <path d="M3 5l4-2 6 2 4-2v12l-4 2-6-2-4 2V5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                    <path d="M7 3v12M13 5v12" stroke="currentColor" stroke-width="1.5"/>
+                  </svg>
+                  Map
+                </button>
+                <button class="btn-close" id="btn-close-detail" aria-label="Close detail panel">&times;</button>
+              </div>
+            </div>
+            <div class="detail-map-wrap" id="detail-map-wrap" hidden>
+              <canvas id="detail-minimap" width="400" height="270" aria-label="Event location map"></canvas>
             </div>
             <div class="detail-body" id="detail-body"></div>
           </div>
@@ -329,6 +345,7 @@
   <script src="../js/data/assets.js"></script>
   <script src="../js/data/staff.js"></script>
   <script src="../js/data/providers.js"></script>
+  <script src="../js/minimap.js"></script>
   <script src="../js/charts.js"></script>
   <script src="../js/management.js"></script>
   <script src="../js/dashboard.js"></script>
