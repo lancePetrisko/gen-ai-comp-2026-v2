@@ -30,7 +30,8 @@ function statusBadge(status) {
     'In Review': 'badge-in-review',
     'Approved': 'badge-approved',
     'Sent to Qualtrics': 'badge-qualtrics',
-    'Fulfilled': 'badge-fulfilled'
+    'Fulfilled': 'badge-fulfilled',
+    'Denied': 'badge-denied'
   };
   return `<span class="badge ${classes[status] || ''}">${escHtml(status)}</span>`;
 }

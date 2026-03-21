@@ -72,6 +72,10 @@
           <div class="card-icon fulfilled"><svg viewBox="0 0 24 24" width="24" height="24"><path d="M4 12l5 5L20 6" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></div>
           <div class="card-info"><span class="card-count" id="count-fulfilled">0</span><span class="card-label">Fulfilled</span></div>
         </div>
+        <div class="summary-card" data-filter-status="Denied">
+          <div class="card-icon denied"><svg viewBox="0 0 24 24" width="24" height="24"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 8l8 8M16 8l-8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
+          <div class="card-info"><span class="card-count" id="count-denied">0</span><span class="card-label">Denied</span></div>
+        </div>
         <div class="summary-card">
           <div class="card-icon upcoming"><svg viewBox="0 0 24 24" width="24" height="24"><rect x="3" y="4" width="18" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3 10h18M8 2v4M16 2v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
           <div class="card-info"><span class="card-count" id="count-upcoming">0</span><span class="card-label">Upcoming (30 days)</span></div>
@@ -93,7 +97,7 @@
             <h3>Filters</h3>
             <div class="filter-group">
               <label for="filter-status">Status</label>
-              <select id="filter-status"><option value="">All</option><option>Submitted</option><option>In Review</option><option>Approved</option><option>Sent to Qualtrics</option><option>Fulfilled</option></select>
+              <select id="filter-status"><option value="">All</option><option>Submitted</option><option>In Review</option><option>Approved</option><option>Sent to Qualtrics</option><option>Fulfilled</option><option>Denied</option></select>
             </div>
             <div class="filter-group">
               <label for="filter-type">Request Type</label>
