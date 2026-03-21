@@ -1,8 +1,8 @@
 # Community Health Event Request System
 
-A proof-of-concept web app that replaces a shared inbox + spreadsheet workflow with an AI-assisted platform for managing community health event and material requests.
+A proof of concept web app that replaces a shared inbox + spreadsheet workflow with an AI assisted platform for managing community health event and material requests.
 
-**2026 Generative AI Competition** — Lance Petrisko, Samuel Rawls, Cohen Phillips
+**2026 University of Utah Generative AI Competition** — Lance Petrisko, Samuel Rawls, Cohen Phillips
 
 ## Quick Start
 
