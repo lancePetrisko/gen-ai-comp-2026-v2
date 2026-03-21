@@ -479,10 +479,13 @@ function renderAssets() {
 }
 
 // ==================== EVENT INVITE MODAL ====================
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('visible');
+}
+
 function openInviteModal(req) {
   const overlay = document.getElementById('modal-overlay');
   const body = document.getElementById('modal-body');
-  overlay.hidden = false;
 
   body.innerHTML = `
     <p style="margin-bottom:1rem;">Generate an event invite for the approved request:</p>
@@ -498,13 +501,12 @@ function openInviteModal(req) {
   `;
 
   document.getElementById('btn-send-invite').onclick = () => {
-    overlay.hidden = true;
+    closeModal();
     showToast('Event invite generated and sent to ' + req.email);
   };
-  document.getElementById('btn-cancel-modal').onclick = () => { overlay.hidden = true; };
-  document.getElementById('btn-close-modal').onclick = () => { overlay.hidden = true; };
+  document.getElementById('btn-close-modal').onclick = closeModal;
+  document.getElementById('btn-cancel-modal').onclick = closeModal;
+  overlay.onclick = (e) => { if (e.target === overlay) closeModal(); };
 
-  overlay.addEventListener('click', (e) => {
-    if (e.target === overlay) overlay.hidden = true;
-  });
+  overlay.classList.add('visible');
 }

@@ -26,6 +26,13 @@
   text-decoration: none;
 }
 
+.nav-logo {
+  height: 32px;
+  width: auto;
+  object-fit: contain;
+  border-radius: 4px;
+}
+
 .nav-links { display: flex; gap: 0.25rem; }
 
 .nav-link {

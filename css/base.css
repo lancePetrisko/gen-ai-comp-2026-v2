@@ -13,3 +13,13 @@ body {
   line-height: 1.6;
   min-height: 100vh;
 }
+
+/* ---------- Footer ---------- */
+.site-footer {
+  text-align: center;
+  padding: 1.5rem 1rem;
+  margin-top: 2rem;
+  border-top: 1px solid var(--c-border);
+  font-size: 0.8rem;
+  color: var(--c-text-secondary);
+}
