@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Sign In | Intermountain Health</title>
+  <title>User Sign In | Intermountain Health</title>
   <link rel="icon" type="image/jpeg" href="../assets/logos/intermouintainHealthLogo_purple.jpeg">
   <link rel="stylesheet" href="../css/variables.css">
   <link rel="stylesheet" href="../css/base.css">
@@ -61,7 +61,8 @@
       margin-bottom: 0.3rem;
       display: block;
     }
-    .login-form .form-group input {
+    .login-form .form-group input,
+    .login-form .form-group select {
       width: 100%;
       padding: 0.6rem 0.75rem;
       border: 1px solid var(--c-border);
@@ -71,7 +72,8 @@
       color: var(--c-text);
       transition: border-color var(--transition), box-shadow var(--transition);
     }
-    .login-form .form-group input:focus {
+    .login-form .form-group input:focus,
+    .login-form .form-group select:focus {
       outline: none;
       border-color: var(--c-primary);
       box-shadow: 0 0 0 3px rgba(37,99,235,0.15);
@@ -113,11 +115,11 @@
         <svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><path d="M4 4h12v2H4zm0 4h12v2H4zm0 4h8v2H4z" fill="currentColor"/></svg>
         Intake Form
       </a>
-      <a href="user-login.html" class="nav-link">
+      <a href="user-login.html" class="nav-link active" aria-current="page">
         <svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><path d="M10 2a5 5 0 0 1 5 5v1a5 5 0 0 1-10 0V7a5 5 0 0 1 5-5zm-7 16a7 7 0 0 1 14 0" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>
         User Portal
       </a>
-      <a href="login.html" class="nav-link active" aria-current="page">
+      <a href="login.html" class="nav-link">
         <svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><path d="M3 3h6v8H3zm8 0h6v5h-6zm0 7h6v7h-6zM3 13h6v4H3z" fill="currentColor"/></svg>
         Admin Dashboard
       </a>
@@ -129,13 +131,13 @@
     <div class="login-card">
       <div class="login-logo">
         <img src="../assets/logos/intermouintainHealthLogo_purple.jpeg" alt="Intermountain Health">
-        <h1>Admin Sign In</h1>
-        <p>Community Health Event Request System</p>
+        <h1>User Portal Sign In</h1>
+        <p>Check the status of your event requests</p>
       </div>
       <form class="login-form" id="login-form" novalidate>
         <div class="form-group">
-          <label for="login-user">Username</label>
-          <input type="text" id="login-user" value="admin@intermountain.org" autocomplete="username">
+          <label for="login-user">Select Your Account</label>
+          <select id="login-user"></select>
         </div>
         <div class="form-group">
           <label for="login-pass">Password</label>
@@ -143,13 +145,13 @@
         </div>
         <div class="login-actions">
           <button type="submit" class="btn btn-primary">
-            <svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><path d="M10 2a6 6 0 0 0-6 6v2H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6a1 1 0 0 0-1-1h-1V8a6 6 0 0 0-6-6zm-3 6a3 3 0 1 1 6 0v2H7V8z" fill="currentColor"/></svg>
+            <svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><path d="M10 2a5 5 0 0 1 5 5v1a5 5 0 0 1-10 0V7a5 5 0 0 1 5-5zm-7 16a7 7 0 0 1 14 0" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>
             Sign In
           </button>
         </div>
       </form>
       <div class="login-demo-notice">
-        <strong>Demo Mode</strong> — Credentials are pre-filled. Click Sign In to continue.
+        <strong>Demo Mode</strong> — Select a requestor and click Sign In to view their portal.
       </div>
     </div>
   </div>
@@ -159,10 +161,40 @@
     <p>Built with Generative AI by <strong>Lance Petrisko</strong>, <strong>Samuel Rawls</strong>, and <strong>Cohen Phillips</strong></p>
   </footer>
 
+  <script src="../js/store.js"></script>
+  <script src="../js/helpers.js"></script>
+  <script src="../js/ai.js"></script>
+  <script src="../js/data/demo-requests.js"></script>
   <script>
+    // Seed data if needed
+    Store.load();
+    if (Store.requests.length === 0) {
+      DEMO_REQUESTS.forEach(data => {
+        const req = processNewRequest({ ...data });
+        req.status = data.status;
+        Store.requests.push(req);
+      });
+      Store.save();
+    }
+
+    // Build unique requestor list from actual stored requests
+    const sel = document.getElementById('login-user');
+    const seen = new Set();
+    Store.requests.forEach(r => {
+      const key = r.requestorName;
+      if (seen.has(key)) return;
+      seen.add(key);
+      const o = document.createElement('option');
+      o.value = key;
+      o.textContent = key + ' — ' + r.organization;
+      sel.appendChild(o);
+    });
+
     document.getElementById('login-form').addEventListener('submit', function(e) {
       e.preventDefault();
-      window.location.href = 'dashboard.html';
+      const name = document.getElementById('login-user').value;
+      localStorage.setItem('chp_user_name', name);
+      window.location.href = 'user-dashboard.html';
     });
   </script>
 </body>
