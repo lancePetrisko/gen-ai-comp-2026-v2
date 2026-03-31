@@ -14,7 +14,7 @@ git clone https://github.com/yourusername/gen-ai-comp-2026-v2.git
 open index.html
 ```
 
-Ships with 12 pre-loaded demo requests. Demo credentials are pre-filled on all login pages.
+Ships with 12 pre-loaded demo requests. Demo credentials are pre-filled on all login pages
 
 ## Pages
 
