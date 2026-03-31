@@ -2,8 +2,8 @@
 
 A proof of concept web app that replaces a shared inbox + spreadsheet workflow with an AI assisted platform for managing community health event and material requests.
 
-**2026 University of Utah Generative AI Competition** — Lance Petrisko, Samuel Rawls, Cohen Phillips
-**Recieved Honorable Mention**
+**2026 University of Utah Generative AI Competition (Recieved Honorable Mention)** — Lance Petrisko, Samuel Rawls, Cohen Phillips
+
 
 ## Quick Start
 
